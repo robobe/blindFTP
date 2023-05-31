@@ -35,7 +35,7 @@ except:
     raise ImportError(msg='the plx module is not installed:')
 
 # internal modules
-from OptionParser_doc import *
+from optparse import OptionParser
 import TabBits, Console
 import TraitEncours
 
@@ -236,7 +236,7 @@ def chemin_interdit (chemin):
 # classe FICHIER
 #-------------------
 
-class Fichier:
+class Sender:
     """classe repr�sentant un fichier en cours de r�ception."""
 
     def __init__(self, paquet):
@@ -477,7 +477,7 @@ class Paquet:
                     self.nouveau_fichier()
         if self.type_paquet == PAQUET_HEARTBEAT:
             debug("Reception HEARTBEAT")
-            HeartBeat.check_heartbeat(HB_recus, self.num_session, self.num_paquet_session, self.num_paquet)
+            HeartBeat.check_heartbeat(hb_reciver, self.num_session, self.num_paquet_session, self.num_paquet)
         if self.type_paquet == PAQUET_DELETEFile:
             debug("Reception DeleteFile notification")
             self.nom_fichier = paquet[TAILLE_ENTETE : TAILLE_ENTETE + self.longueur_nom]
@@ -521,7 +521,7 @@ class Paquet:
         self.fichier_en_cours = self.nom_fichier
         debug("Nouveau fichier ou fichier mis a jour")
         # on cr�e un nouvel objet fichier d'apr�s les infos du paquet:
-        nouveau_fichier = Fichier(self)
+        nouveau_fichier = Sender(self)
         fichiers[self.nom_fichier] = nouveau_fichier
         nouveau_fichier.traiter_paquet(self)
 
@@ -674,7 +674,7 @@ class HeartBeat:
         s.sendto(paquet, (HOST, PORT))
         s.close()
 
-    def envoyer_Boucleheartbeat(self):
+    def send_hb_loop(self):
         """A loop to send heartbeat sequence every X seconds"""
         self.newsession()
         while True:
@@ -683,9 +683,9 @@ class HeartBeat:
             time.sleep(self.hb_delay)
 
 
-    def Th_envoyer_BoucleheartbeatT(self):
+    def start_hb_sender(self):
         """ thead to send heartbeat """
-        Sendheartbeat=threading.Thread(None, self.envoyer_Boucleheartbeat, None)
+        Sendheartbeat=threading.Thread(None, self.send_hb_loop, None)
         Sendheartbeat.start()
 
 #------------------------------------------------------------------------------
@@ -748,15 +748,15 @@ class LimiteurDebit:
 # RECEVOIR
 #-------------------
 
-def recevoir(repertoire):
+def receive(repertoire):
     """Pour recevoir les paquets UDP BFTP contenant les fichiers, et stocker
     les fichiers re�us dans le r�pertoire indiqu� en param�tre."""
 
     # bidouille: on change le contenu de la variable globale
     CHEMIN_DEST = repertoire
-    print ('Les fichiers seront recus dans le repertoire "%s".' % str_lat1(CHEMIN_DEST.abspath(),errors='replace'))
-    print ('En ecoute sur le port UDP %d...' % PORT)
-    print ('(taper Ctrl+Pause pour quitter)')
+    print ('The files will be received in the directory "%s".' % str_lat1(CHEMIN_DEST.abspath(),errors='replace'))
+    print ('Listening on the port UDP %d...' % PORT)
+    print ('(type Ctrl+Pause pour quit)')
     p = Paquet()
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.bind((HOST, PORT))
@@ -843,7 +843,7 @@ def SendDeleteFileMessage(fichier):
 # ENVOYER
 #-------------------
 
-def envoyer(fichier_source, fichier_dest, limiteur_debit=None, num_session=None,
+def send(fichier_source, fichier_dest, limiteur_debit=None, num_session=None,
     num_paquet_session=None, crc=None):
     """Pour �mettre un fichier en paquets UDP BFTP.
 
@@ -1159,7 +1159,7 @@ def synchro_arbo(repertoire):
                             if DRef.dict[f].get(ATTR_CRC)=='0':
                                 current_CRC=str(CalcCRC(fullpathfichier))
                                 DRef.dict[f].set(ATTR_CRC, current_CRC)
-                            if (envoyer(fullpathfichier, f, limiteur_debit, crc=int(DRef.dict[f].get(ATTR_CRC))) != -1):
+                            if (send(fullpathfichier, f, limiteur_debit, crc=int(DRef.dict[f].get(ATTR_CRC))) != -1):
                                 DRef.dict[f].set(ATTR_LASTSEND, str(time.time()))
                                 DRef.dict[f].set(ATTR_NBSEND, str(int(DRef.dict[f].get(ATTR_NBSEND)) + 1))
                                 if int(DRef.dict[f].get(ATTR_NBSEND)) > MinFileRedundancy:
@@ -1249,7 +1249,7 @@ def analyse_options():
 
     # on cr�e un objet optparse.OptionParser, en lui donnant comme cha�ne
     # "usage" la docstring en d�but de ce fichier:
-    parseur = OptionParser_doc(usage="%prog [options] <fichier ou repertoire>")
+    parseur = OptionParser(usage="%prog [options] <fichier ou repertoire>")
     parseur.doc = __doc__
 
     # on ajoute les options possibles:
@@ -1300,25 +1300,14 @@ if __name__ == '__main__':
     # pour que la date des fichiers soit g�r�e en nombre entier de secondes
     # (cela d�pend des OS: cf. aide Python)
     # => utile uniquement pour g�n�rer un num�ro de session
-    os.stat_float_times(False)
+    # os.stat_float_times(False)
 
     (options, args) = analyse_options()
-    cible = path(args[0])
+    target = path(args[0])
     HOST = options.adresse
     PORT = options.port_UDP
     MODE_DEBUG = options.debug
 
-    # Utilisation de Psyco pour am�liorer les performances:
-    # Perturbe l'affichage sous Windows: A CORRIGER.
-    #try:
-    #   import psyco
-    #   psyco.full()
-    #   debug("Psyco charge.")
-    #except ImportError:
-    #   print "ATTENTION: le module Psyco n'est pas installe, les performances ne seront pas optimales !"
-    #   pass
-
-    # pour mesurer les stats de reception:
     stats = Stats()
 
     logging.basicConfig(level=logging.DEBUG,
@@ -1326,22 +1315,22 @@ if __name__ == '__main__':
                 datefmt='%d/%m/%Y %H:%M:%S',
                 filename='bftp.log',
                 filemode='a')
-    logging.info("Demarrage de BlindFTP")
+    logging.info("Start BlindFTP")
 
     # Emission de messages heartbeat
-    HB_emis=HeartBeat()
-    HB_recus=HeartBeat()
+    hb_sender=HeartBeat()
+    hb_reciver=HeartBeat()
     if not(options.recevoir):
-        HB_emis.Th_envoyer_BoucleheartbeatT()
+        hb_sender.start_hb_sender()
 
     if options.envoi_fichier:
-        envoyer(cible, cible.name)
+        send(target, target.name)
     elif (options.synchro_arbo or options.synchro_arbo_stricte):
         # D�lais pour consid�rer un fichier "hors ligne" comme d�finitivement effac�
         OffLineDelay=OFFLINEDELAY
         # Fichier r�f�rence de l'arborescence synchronis�e
         # TODO : Nom du fichier transmis en param�tre
-        print("Lecture/contruction du fichier de reprise")
+        print("Read/build recovery file")
         XFLFile_id=False
         working=TraitEncours.TraitEnCours()
         working.StartIte()
@@ -1352,25 +1341,25 @@ if __name__ == '__main__':
             XFLFile_id,XFLFile=tempfile.mkstemp(prefix='BFTP_',suffix='.xml')
         DRef = xfl.DirTree()
         if (XFLFile_id):
-            debug("Fichier de reprise de la session : %s" %XFLFile)
-            DRef.read_disk(cible, working.AffCar)
+            debug("Session resume file : %s" %XFLFile)
+            DRef.read_disk(target, working.AffCar)
         else:
             debug("Lecture du fichier de reprise : %s" %XFLFile)
             try:
                 DRef.read_file(XFLFile)
             except:
-                DRef.read_disk(cible, working.AffCar)
+                DRef.read_disk(target, working.AffCar)
         if options.boucle:
             while True:
                 try:
-                    synchro_arbo(cible)
+                    synchro_arbo(target)
                 except:
                     print("Erreur lors de l'envoi d'arborescence.")
                     traceback.print_exc()
                 print("Attente de %d secondes avant prochain envoi... (Ctrl+Pause ou Ctrl+C pour quitter)\n" % options.pause)
                 time.sleep(options.pause)
         else:
-            synchro_arbo(cible)
+            synchro_arbo(target)
         if (XFLFile_id):
             debug("Suppression du fichier de reprise temporaire : %s" %XFLFile)
             os.close(XFLFile_id)
@@ -1382,7 +1371,7 @@ if __name__ == '__main__':
         # on commence par augmenter la priorit� du processus de r�ception:
         augmenter_priorite()
         # thread de timeout des heartbeat
-        HB_recus.Th_checktimeout_heartbeatT()
+        hb_reciver.Th_checktimeout_heartbeatT()
         # puis on se met en r�ception:
-        recevoir(CHEMIN_DEST)
-    logging.info("Arret de BlindFTP")
+        receive(CHEMIN_DEST)
+    logging.info("Stop BlindFTP")

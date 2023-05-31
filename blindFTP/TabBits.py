@@ -12,43 +12,43 @@ Copyright Philippe Lagadec 2005-2007
 Auteur:
 - Philippe Lagadec (PL) - philippe.lagadec(a)laposte.net
 
-Ce logiciel est régi par la licence CeCILL soumise au droit français et
+Ce logiciel est rï¿½gi par la licence CeCILL soumise au droit franï¿½ais et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
 utiliser, modifier et/ou redistribuer ce programme sous les conditions
-de la licence CeCILL telle que diffusée par le CEA, le CNRS et l'INRIA
+de la licence CeCILL telle que diffusï¿½e par le CEA, le CNRS et l'INRIA
 sur le site "http://www.cecill.info".
 
-En contrepartie de l'accessibilité au code source et des droits de copie,
-de modification et de redistribution accordés par cette licence, il n'est
-offert aux utilisateurs qu'une garantie limitée.  Pour les mêmes raisons,
-seule une responsabilité restreinte pèse sur l'auteur du programme,  le
-titulaire des droits patrimoniaux et les concédants successifs.
+En contrepartie de l'accessibilitï¿½ au code source et des droits de copie,
+de modification et de redistribution accordï¿½s par cette licence, il n'est
+offert aux utilisateurs qu'une garantie limitï¿½e.  Pour les mï¿½mes raisons,
+seule une responsabilitï¿½ restreinte pï¿½se sur l'auteur du programme,  le
+titulaire des droits patrimoniaux et les concï¿½dants successifs.
 
-A cet égard  l'attention de l'utilisateur est attirée sur les risques
-associés au chargement,  à l'utilisation,  à la modification et/ou au
-développement et à la reproduction du logiciel par l'utilisateur étant
-donné sa spécificité de logiciel libre, qui peut le rendre complexe à
-manipuler et qui le réserve donc à des développeurs et des professionnels
-avertis possédant  des  connaissances  informatiques approfondies.  Les
-utilisateurs sont donc invités à charger  et  tester  l'adéquation  du
-logiciel à leurs besoins dans des conditions permettant d'assurer la
-sécurité de leurs systèmes et ou de leurs données et, plus généralement,
-à l'utiliser et l'exploiter dans les mêmes conditions de sécurité.
+A cet ï¿½gard  l'attention de l'utilisateur est attirï¿½e sur les risques
+associï¿½s au chargement,  ï¿½ l'utilisation,  ï¿½ la modification et/ou au
+dï¿½veloppement et ï¿½ la reproduction du logiciel par l'utilisateur ï¿½tant
+donnï¿½ sa spï¿½cificitï¿½ de logiciel libre, qui peut le rendre complexe ï¿½
+manipuler et qui le rï¿½serve donc ï¿½ des dï¿½veloppeurs et des professionnels
+avertis possï¿½dant  des  connaissances  informatiques approfondies.  Les
+utilisateurs sont donc invitï¿½s ï¿½ charger  et  tester  l'adï¿½quation  du
+logiciel ï¿½ leurs besoins dans des conditions permettant d'assurer la
+sï¿½curitï¿½ de leurs systï¿½mes et ou de leurs donnï¿½es et, plus gï¿½nï¿½ralement,
+ï¿½ l'utiliser et l'exploiter dans les mï¿½mes conditions de sï¿½curitï¿½.
 
-Le fait que vous puissiez accéder à cet en-tête signifie que vous avez
-pris connaissance de la licence CeCILL, et que vous en avez accepté les
+Le fait que vous puissiez accï¿½der ï¿½ cet en-tï¿½te signifie que vous avez
+pris connaissance de la licence CeCILL, et que vous en avez acceptï¿½ les
 termes.
 """
 
 # HISTORIQUE:
-# 03/07/2005 v0.01: - 1ère version
+# 03/07/2005 v0.01: - 1ï¿½re version
 # 06/07/2005 v0.02: - remplacement du buffer chaine par un objet array
-# 08/07/2005 v0.03: - ajout du comptage des bits à 1
+# 08/07/2005 v0.03: - ajout du comptage des bits ï¿½ 1
 
 # A FAIRE:
-# + vérifier si index hors tableau (<0 ou >N-1)
-# - import de chaîne ou fichier ou liste de booléens
-# - export vers chaîne ou fichier
+# + vï¿½rifier si index hors tableau (<0 ou >N-1)
+# - import de chaï¿½ne ou fichier ou liste de boolï¿½ens
+# - export vers chaï¿½ne ou fichier
 # - interface tableau Python
 # - taille dynamique
 
@@ -65,58 +65,58 @@ class TabBits:
 		"""constructeur de TabBits.
 		
 		taille: nombre de bits du tableau.
-		buffer: chaine utilisée pour remplir le tableau (optionnel).
-		readFile: fichier utilisé pour remplir le tableau (optionnel).
+		buffer: chaine utilisï¿½e pour remplir le tableau (optionnel).
+		readFile: fichier utilisï¿½ pour remplir le tableau (optionnel).
 		"""
 		self._taille = taille
-		self.nb_true = 0    # nombre de bits à 1, 0 par défaut
+		self.nb_true = 0    # nombre de bits ï¿½ 1, 0 par dï¿½faut
 		if buffer == None and readFile == None:
-			# on calcule le nombre d'octets nécessaires pour le buffer
+			# on calcule le nombre d'octets nï¿½cessaires pour le buffer
 			taille_buffer = (taille+7)/8
-			# on crée alors un buffer de cette taille, initialisé à zéro:
+			# on crï¿½e alors un buffer de cette taille, initialisï¿½ ï¿½ zï¿½ro:
 			# self._buffer = chr(0)*taille_buffer
-			# on crée un objet array de Bytes
+			# on crï¿½e un objet array de Bytes
 			self._buffer = array.array('B')
-			# on ajoute N éléments nuls
-			# (à optimiser: boucle pour éviter de créer une liste ?)
+			# on ajoute N ï¿½lï¿½ments nuls
+			# (ï¿½ optimiser: boucle pour ï¿½viter de crï¿½er une liste ?)
 			self._buffer.fromlist([0]*taille_buffer)
 		else:
-			# pas encore écrit...
+			# pas encore ï¿½crit...
 			raise NotImplementedError
 
 	def get (self, indexBit):
-		"""Pour lire un bit dans le tableau. Retourne un booléen."""
-		# index de l'octet correspondant dans le buffer et décalage du bit dans l'octet
+		"""Pour lire un bit dans le tableau. Retourne un boolï¿½en."""
+		# index de l'octet correspondant dans le buffer et dï¿½calage du bit dans l'octet
 		indexOctet, decalage =  divmod (indexBit, 8)
 		octet = self._buffer[indexOctet]
 		masque = 1 << decalage
 		bit = octet & masque
-		# on retourne un booléen
+		# on retourne un boolï¿½en
 		return bool(bit)
 
 	def set (self, indexBit, valeur):
-		"""Pour écrire un bit dans le tableau."""
-		# on s'assure que valeur est un booléen
+		"""Pour ï¿½crire un bit dans le tableau."""
+		# on s'assure que valeur est un boolï¿½en
 		valeur = bool(valeur)
-		# index de l'octet correspondant dans le buffer et décalage du bit dans l'octet
+		# index de l'octet correspondant dans le buffer et dï¿½calage du bit dans l'octet
 		indexOctet, decalage =  divmod (indexBit, 8)
 		octet = self._buffer[indexOctet]
 		masque = 1 << decalage
 		ancienne_valeur = bool(octet & masque)
 		if valeur == True and ancienne_valeur == False:
-			# on doit positionner le bit à 1
+			# on doit positionner le bit ï¿½ 1
 			octet = octet | masque
 			self._buffer[indexOctet] = octet
 			self.nb_true += 1
 		elif valeur == False and ancienne_valeur == True:
-			# on doit positionner le bit à 0
+			# on doit positionner le bit ï¿½ 0
 			masque = 0xFF ^ masque
 			octet = octet & masque
 			self._buffer[indexOctet] = octet
 			self.nb_true -= 1
 
 	def __str__ (self):
-		"""pour convertir le TabBits en chaîne contenant des 0 et des 1."""
+		"""pour convertir le TabBits en chaï¿½ne contenant des 0 et des 1."""
 		chaine = ""
 		for i in range(0, self._taille):
 			bit = self.get(i)
@@ -127,18 +127,18 @@ class TabBits:
 		return chaine
 		
 if __name__ == "__main__":
-	# quelques tests si le module est lancé directement
+	# quelques tests si le module est lancï¿½ directement
 	N=100
 	tb = TabBits(N)
-	print str(tb)
+	print (str(tb))
 	tb.set(2, True)
 	tb.set(7, True)
 	tb.set(N-1, True)
-	print str(tb)
-	print "tb[0] = %d" % tb.get(0)
-	print "tb[2] = %d" % tb.get(2)
-	print "tb[%d] = %d" % (N-1, tb.get(N-1))
-	print "taille bits = %d" % tb._taille
-	print "taille buffer = %d" % len(tb._buffer)
+	print (str(tb))
+	print ("tb[0] = %d" % tb.get(0))
+	print ("tb[2] = %d" % tb.get(2))
+	print ("tb[%d] = %d" % (N-1, tb.get(N-1)))
+	print ("taille bits = %d" % tb._taille)
+	print ("taille buffer = %d" % len(tb._buffer))
 			
 		

@@ -99,13 +99,6 @@ __author__  = 'Philippe Lagadec'
 import os, os.path, sys, urllib, imp, webbrowser, threading, signal
 from subprocess import *
 
-# specific modules for Windows:
-if sys.platform == 'win32':
-    try:
-        import win32api, win32process, win32con
-    except:
-        raise ImportError, "the pywin32 module is not installed: "\
-                           +"see http://sourceforge.net/projects/pywin32"
 
 # specific modules for Unix:
 try:
@@ -123,9 +116,7 @@ if sys.platform == 'win32':
 elif sys.platform in ('linux2', 'darwin'):
     # on Linux and MacOSX it's UTF-8:
     CODEC_CONSOLE = 'utf-8'
-else:
-    raise NotImplementedError, \
-    "The console display is not configured for this platform (%s)" % sys.platform
+
 
 # FOR POPEN_TIMER:
 # Default timeout for a process launched Popen_timer (seconds)
@@ -186,9 +177,9 @@ def str_lat1 (string, errors='strict'):
     @return: converted string
     @rtype: str
     """
-    if isinstance(string, unicode):
-        return string.encode('latin_1', errors)
-    elif isinstance(string, str):
+    # if isinstance(string, unicode):
+    #     return string.encode('latin_1', errors)
+    if isinstance(string, str):
         return string
     else:
         return str(string)
@@ -227,7 +218,7 @@ def print_console (string, errors='strict', initial_encoding='latin_1'):
     @return: converted string
     @rtype: str
     """
-    print str_console(string, errors, initial_encoding)
+    print (str_console(string, errors, initial_encoding))
 
 
 def get_username(with_domain=False):
@@ -235,21 +226,10 @@ def get_username(with_domain=False):
     Returns the username of the current logged on user.
     Portable on Windows and Unix.
     If with_domain=True, on Windows the domain or machine name is added to the
-    username as "\\domain\user" or "\\machine\user".
+    
     """
-    # TODO: why not return user@machine on Unix if with_domain=True ?
-    if sys.platform == 'win32':
-        # on Windows it is a Win32 call:
-        if with_domain:
-            # add domain name if requested:
-            return '\\\\' + win32api.GetDomainName() + '\\' + win32api.GetUserName()
-        else:
-            # else only user name:
-            return win32api.GetUserName()
-    else:
-        # on Unix the info is extracted from /etc/passwd:
-        uid = os.getuid()
-        return pwd.getpwuid(uid)[0]
+    uid = os.getuid()
+    return pwd.getpwuid(uid)[0]
 
 
 def main_is_frozen():
@@ -289,18 +269,10 @@ def display_html_file (htmlfile_abspath):
     .xml), else the file will be opened in its default application instead of
     the web browser. A ValueError exception will be raised otherwise.
     """
-    #TODO: add os.abspath ?
-    if sys.platform == 'win32' :
-        # check extension to avoid launching another application:
-        if os.path.splitext(htmlfile_abspath.lower())[1] not in ('.html','.htm',
-            '.xml'):
-            raise ValueError, 'On Windows, filename extension must be .html,.htm or .xml'
-        # on Windows, os.startfile is used:
-        os.startfile(htmlfile_abspath)
-    else:
-        # on other OSes, webbrowser.open with a file URL:
-        file_url = 'file://' + urllib.pathname2url(htmlfile_abspath)
-        webbrowser.open(file_url)
+    
+    # on other OSes, webbrowser.open with a file URL:
+    file_url = 'file://' + urllib.pathname2url(htmlfile_abspath)
+    webbrowser.open(file_url)
 
 def calc_dirsize (dirpath):
     """
@@ -394,112 +366,84 @@ def _test_Popen_timer ():
     """
     tests for Popen_timer
     """
-    print 'Tests for Popen_timer:'
-    print '1) a quick command which ends normally before timeout'
+    print ('Tests for Popen_timer:')
+    print ('1) a quick command which ends normally before timeout')
     if sys.platform == 'win32':
         # Windows
         cmd1 = ['cmd.exe', '/c', 'dir']
     else:
         # Unix
         cmd1 = ['/bin/sh', '-c', 'ls /etc']
-    print 'cmd1 = ' + repr(cmd1)
-    print 'Popen_timer (cmd1)...'
+    print ('cmd1 = ' + repr(cmd1))
+    print ('Popen_timer (cmd1)...')
     res = Popen_timer (cmd1)
     if res == 0:
-        print 'OK, exit code = 0'
+        print ('OK, exit code = 0')
     else:
-        print 'NOK, exit code = %d instead of 0' % res
-    print ''
+        print ('NOK, exit code = %d instead of 0' % res)
+    print ('')
 
     timeout = 3
-    print '2) a long command which reaches timeout (%d s)' % timeout
-    if sys.platform == 'win32':
-        cmd2 = ['cmd.exe', '/c', 'pause']
-    else:
-        #cmd2 = ['/bin/sh', '-c', 'read -p waiting...']
-        cmd2 = ['/bin/sh', '-c', 'read']
-    print 'cmd2 = ' + repr(cmd2)
-    print 'Popen_timer (cmd2, timeout=%d)...' % timeout
+    print ('2) a long command which reaches timeout (%d s)' % timeout)
+    
+    
+    
+    cmd2 = ['/bin/sh', '-c', 'read']
+    print ('cmd2 = ' + repr(cmd2))
+    print ('Popen_timer (cmd2, timeout=%d)...' % timeout)
     res = Popen_timer (cmd2, stdin=None, stdout=None, stderr=None,
         timeout=timeout)
     if res == EXIT_KILL_PTIMER:
-        print 'OK, exit code = EXIT_KILL_PTIMER (%d)' % res
+        print ('OK, exit code = EXIT_KILL_PTIMER (%d)' % res)
     else:
-        print 'NOK, exit code = %d instead of EXIT_KILL_PTIMER (%d)' % (res,
-            EXIT_KILL_PTIMER)
-    print ''
+        print ('NOK, exit code = %d instead of EXIT_KILL_PTIMER (%d)' % (res,
+            EXIT_KILL_PTIMER))
 
     # same tests with logging enabled:
     import logging
     logging.basicConfig(level=logging.DEBUG)
-    print '3) a quick command which ends normally before timeout + LOG'
-    print 'cmd1 = ' + repr(cmd1)
-    print 'Popen_timer (cmd1)...'
+    print ('3) a quick command which ends normally before timeout + LOG')
+    print ('cmd1 = ' + repr(cmd1))
+    print ('Popen_timer (cmd1)...')
     res = Popen_timer (cmd1, log=logging)
     if res == 0:
-        print 'OK, exit code = 0'
+        print ('OK, exit code = 0')
     else:
-        print 'NOK, exit code = %d instead of 0' % res
-    print ''
+        print ('NOK, exit code = %d instead of 0' % res)
 
     timeout = 3
-    print '4) a long command which reaches timeout (%d s)' % timeout
-    print 'cmd2 = ' + repr(cmd2)
-    print 'Popen_timer (cmd2, timeout=%d)...' % timeout
+    print ('4) a long command which reaches timeout (%d s)' % timeout)
+    print ('cmd2 = ' + repr(cmd2))
+    print ('Popen_timer (cmd2, timeout=%d)...' % timeout)
     res = Popen_timer (cmd2, stdin=None, stdout=None, stderr=None,
         timeout=timeout, log=logging)
     if res == EXIT_KILL_PTIMER:
-        print 'OK, exit code = EXIT_KILL_PTIMER (%d)' % res
+        print ('OK, exit code = EXIT_KILL_PTIMER (%d)' % res)
     else:
-        print 'NOK, exit code = %d instead of EXIT_KILL_PTIMER (%d)' % (res,
-            EXIT_KILL_PTIMER)
-    print ''
+        print ('NOK, exit code = %d instead of EXIT_KILL_PTIMER (%d)' % (res,
+            EXIT_KILL_PTIMER))
 
 
 #=== MAIN =====================================================================
 
 if __name__ == "__main__":
-    print __doc__
-    # A few tests:
-    print '-'*79
-    print 'Tests for module "%s" :' % __file__
-    print '-'*79
-    print ''
-
-    print "get_username()                 =", get_username()
-    print "get_username(with_domain=True) =", get_username(with_domain=True)
-    print ''
-
-    print "main_is_frozen() =", main_is_frozen()
-    print "get_main_dir()   =", get_main_dir()
-    print ''
-
-    print 'Test str and console functions:'
-    str_accents = 'éèêëçà'
-    ustr_accents = u'éèêëçà'
+    str_accents = 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½'
+    ustr_accents = u'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½'
     assert isinstance(unistr(str_accents), unicode)
     print_console(str_accents)
     print_console(ustr_accents)
     print_console(str_lat1(ustr_accents))
     print_console(unistr(str_accents))
     print_console(unistr(ustr_accents))
-    print ''
+    print ('')
 
     # Test Popen_timer:
     _test_Popen_timer()
-    print ''
 
-    print "Tests for display_html_file():"
-    if sys.platform == 'win32' :
-        # on Windows, check that extensions except html, htm, xml are not
-        # allowed:
-        try:
-            display_html_file('c:\\boot.ini')
-            print 'NOK: any file extension is allowed !'
-        except ValueError:
-            print 'OK: extensions are checked by display_html_file.'
+    print ("Tests for display_html_file():")
+    
     filename = 'test_plx.html'
-    print "should now open %s in the default browser." % filename
+    print ("should now open %s in the default browser." % filename)
     try:
         raw_input('Press enter to launch browser... (or Ctrl+C to stop)')
         f = open(filename, 'w')
@@ -508,7 +452,7 @@ if __name__ == "__main__":
         display_html_file(os.path.abspath(filename))
         os.remove(filename)
     except KeyboardInterrupt:
-        print '\nstopped.'
+        print ('\nstopped.')
 
 
 # This module was coded while listening at Spoon "Ga ga ga ga ga" album. ;-)

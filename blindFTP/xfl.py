@@ -37,8 +37,7 @@ import sys, time
 try:
     from path import *
 except:
-    raise ImportError, "the path module is not installed: "\
-                     + "see http://www.jorendorff.com/articles/python/path/"
+    raise ImportError(msg="the path module is not installed")
 
 ### import LXML for pythonic XML:
 ##try:
@@ -55,8 +54,7 @@ try:
         # external ElemenTree for Python <=2.4
         import elementtree.ElementTree as ET
 except:
-    raise ImportError, "the ElementTree module is not installed: "\
-                     + "see http://effbot.org/zone/element-index.htm"
+    raise ImportError("the ElementTree module is not installed: ")
 
 #--- CONSTANTS ----------------------------------------------------------------
 
@@ -225,7 +223,7 @@ def callback_dir_print(dir, element):
     """
     sample callback function to print dir path.
     """
-    print dir
+    print(dir)
 
 def callback_dir_print2(dir, element):
     """
@@ -238,13 +236,13 @@ def callback_dir_print2(dir, element):
         pathdir = dir[0:l1]+"..."+dir[lg-l2:lg]
     else:
         pathdir=dir + (75-lg)*" "
-    print " %s\r" %pathdir,
+    print (" %s\r" %pathdir)
 
 def callback_file_print(file, element):
     """
     sample callback function to print file path.
     """
-    print " - " + file
+    print(" - " + file)
 
 
 
@@ -253,8 +251,8 @@ def callback_file_print(file, element):
 if __name__ == "__main__":
 
     if len(sys.argv) < 3:
-        print __doc__
-        print "usage: python %s <root path> <xml file> [previous xml file]" % path(sys.argv[0]).name
+        print (__doc__)
+        print ("usage: python %s <root path> <xml file> [previous xml file]" % path(sys.argv[0]).name)
         sys.exit(1)
     d = DirTree()
     d.read_disk(sys.argv[1], callback_dir_print, callback_file_print)
@@ -263,18 +261,18 @@ if __name__ == "__main__":
         d2 = DirTree()
         d2.read_file(sys.argv[3])
         same, different, only1, only2 = compare_DT(d, d2)
-        print "\nSAME:"
+        print( "\nSAME:")
         for f in sorted(same):
-            print "  "+f
-        print "\nDIFFERENT:"
+            print ("  "+f)
+        print ("\nDIFFERENT:")
         for f in sorted(different):
-            print "  "+f
-        print "\nNEW:"
+            print ("  "+f)
+        print ("\nNEW:")
         for f in sorted(only1):
-            print "  "+f
-        print "\nDELETED:"
+            print ("  "+f)
+        print ("\nDELETED:")
         for f in sorted(only2):
-            print "  "+f
+            print ("  "+f)
 
 
 

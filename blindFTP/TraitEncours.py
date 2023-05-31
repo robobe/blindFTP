@@ -10,38 +10,38 @@ version 0.03 du 24/05/2008
 Auteur:
 - Laurent VILLEMIN (LV) - Laurent.villemin(a)laposte.net
 
-Ce logiciel est régi par la licence CeCILL soumise au droit français et
+Ce logiciel est rï¿½gi par la licence CeCILL soumise au droit franï¿½ais et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
 utiliser, modifier et/ou redistribuer ce programme sous les conditions
-de la licence CeCILL telle que diffusée par le CEA, le CNRS et l'INRIA
+de la licence CeCILL telle que diffusï¿½e par le CEA, le CNRS et l'INRIA
 sur le site "http://www.cecill.info".
 
-En contrepartie de l'accessibilité au code source et des droits de copie,
-de modification et de redistribution accordés par cette licence, il n'est
-offert aux utilisateurs qu'une garantie limitée.  Pour les mêmes raisons,
-seule une responsabilité restreinte pèse sur l'auteur du programme,  le
-titulaire des droits patrimoniaux et les concédants successifs.
+En contrepartie de l'accessibilitï¿½ au code source et des droits de copie,
+de modification et de redistribution accordï¿½s par cette licence, il n'est
+offert aux utilisateurs qu'une garantie limitï¿½e.  Pour les mï¿½mes raisons,
+seule une responsabilitï¿½ restreinte pï¿½se sur l'auteur du programme,  le
+titulaire des droits patrimoniaux et les concï¿½dants successifs.
 
-A cet égard  l'attention de l'utilisateur est attirée sur les risques
-associés au chargement,  à l'utilisation,  à la modification et/ou au
-développement et à la reproduction du logiciel par l'utilisateur étant
-donné sa spécificité de logiciel libre, qui peut le rendre complexe à
-manipuler et qui le réserve donc à des développeurs et des professionnels
-avertis possédant  des  connaissances  informatiques approfondies.  Les
-utilisateurs sont donc invités à charger  et  tester  l'adéquation  du
-logiciel à leurs besoins dans des conditions permettant d'assurer la
-sécurité de leurs systèmes et ou de leurs données et, plus généralement,
-à l'utiliser et l'exploiter dans les mêmes conditions de sécurité.
+A cet ï¿½gard  l'attention de l'utilisateur est attirï¿½e sur les risques
+associï¿½s au chargement,  ï¿½ l'utilisation,  ï¿½ la modification et/ou au
+dï¿½veloppement et ï¿½ la reproduction du logiciel par l'utilisateur ï¿½tant
+donnï¿½ sa spï¿½cificitï¿½ de logiciel libre, qui peut le rendre complexe ï¿½
+manipuler et qui le rï¿½serve donc ï¿½ des dï¿½veloppeurs et des professionnels
+avertis possï¿½dant  des  connaissances  informatiques approfondies.  Les
+utilisateurs sont donc invitï¿½s ï¿½ charger  et  tester  l'adï¿½quation  du
+logiciel ï¿½ leurs besoins dans des conditions permettant d'assurer la
+sï¿½curitï¿½ de leurs systï¿½mes et ou de leurs donnï¿½es et, plus gï¿½nï¿½ralement,
+ï¿½ l'utiliser et l'exploiter dans les mï¿½mes conditions de sï¿½curitï¿½.
 
-Le fait que vous puissiez accéder à cet en-tête signifie que vous avez
-pris connaissance de la licence CeCILL, et que vous en avez accepté les
+Le fait que vous puissiez accï¿½der ï¿½ cet en-tï¿½te signifie que vous avez
+pris connaissance de la licence CeCILL, et que vous en avez acceptï¿½ les
 termes.
 """
 #------------------------------------------------------------------------------
 # HISTORIQUE:
-# 04/04/2008 v0.01 LV : - 1ère version
+# 04/04/2008 v0.01 LV : - 1ï¿½re version
 # 05/04/2008 v0.02 LV : Ajout de l'affichage en mode clignotant
-# 24/05/2008 v0.03 LV : Ajout d'une tronquature du message si demandée
+# 24/05/2008 v0.03 LV : Ajout d'une tronquature du message si demandï¿½e
 import time,sys
 
 class TraitEnCours:
@@ -49,20 +49,20 @@ class TraitEnCours:
         Module permettant un affichage d'un motif cyclique
         ou version texte du sablier graphique
         Affichages disponibles
-            un seul caractère d'une chaine affiché en boucle
-            une chaine en défilement Droite Gauche
-            une chaine en défilement Gauche Droite
+            un seul caractï¿½re d'une chaine affichï¿½ en boucle
+            une chaine en dï¿½filement Droite Gauche
+            une chaine en dï¿½filement Gauche Droite
             une chaine en clignotement
             ...
     """
 # Variables internes
-# __chaine : chaine contenant le motif affiché
-# __mod : longueur de la chaine, utilisé pour la rotation D/G
-# __temps : date du dernier affichage (optimise l'affichage au strict nécessaire)
+# __chaine : chaine contenant le motif affichï¿½
+# __mod : longueur de la chaine, utilisï¿½ pour la rotation D/G
+# __temps : date du dernier affichage (optimise l'affichage au strict nï¿½cessaire)
 
     def __init__(self):
         """
-        Initialisation du motif par défaut
+        Initialisation du motif par dï¿½faut
         """
         self.__chaine='/-\|'
         self.__mod=len(self.__chaine)
@@ -71,12 +71,12 @@ class TraitEnCours:
     def NewChaine(self, newchaine, LgMax=79, truncate=False):
         """
         Affectation d'un nouveau motif
-        Controle du paramètre LgMax
+        Controle du paramï¿½tre LgMax
         """
 
         lg=len(newchaine)
         if truncate==True and lg > LgMax:
-            # Chaine trop longue à couper en 2 + insertion de "..." au milieu
+            # Chaine trop longue ï¿½ couper en 2 + insertion de "..." au milieu
             l1 = (LgMax - 3) / 2
             l2 = LgMax - l1 - 3
             self.__chaine = newchaine[0:l1] + "..." + newchaine[lg-l2:lg]
@@ -86,7 +86,7 @@ class TraitEnCours:
 
     def StartIte(self,val=None):
         """
-        Démarrage du compteur d'iteration
+        Dï¿½marrage du compteur d'iteration
         """
         if val==None:
             self.__ite=0
@@ -102,7 +102,7 @@ class TraitEnCours:
 
     def __ChDecalDG(self):
         """
-        Décalage d'une chaine de droite à gauche
+        Dï¿½calage d'une chaine de droite ï¿½ gauche
         """
         pos=0
         newchaine=''
@@ -113,7 +113,7 @@ class TraitEnCours:
 
     def __ChDecalGD(self):
         """
-        Décalage d'une chaine de gauche à droite
+        Dï¿½calage d'une chaine de gauche ï¿½ droite
         """
         pos=0
         newchaine=''
@@ -124,37 +124,37 @@ class TraitEnCours:
 
     def AffCar(self, *args):
         """
-        Affichage caractere par caractère
+        Affichage caractere par caractï¿½re
         """
         CurrentTime=time.time()
         if CurrentTime-self.__temps > 0.2:
             self.__ite=self.__IncrementIte()
-            print "%s\r" %self.__chaine[self.__ite%self.__mod],
+            print("%s\r" %self.__chaine[self.__ite%self.__mod], end=' ')
             sys.stdout.flush()
             self.__temps=CurrentTime
 
     def AffLigneDG(self, *args):
         """
-        Affichage d'une ligne selon un mode "chenillard" de droite à gauche
+        Affichage d'une ligne selon un mode "chenillard" de droite ï¿½ gauche
         """
         CurrentTime=time.time()
         if time.time()-self.__temps > 0.2:
             self.__ite=self.__IncrementIte()
             self.__chaine=self.__ChDecalGD()
-            print "%s\r" %self.__chaine,
+            print("%s\r" %self.__chaine, end=' ')
             sys.stdout.flush()
             self.__temps=CurrentTime
 
 
     def AffLigneGD(self, *args):
         """
-        Affichage d'une ligne selon un mode "chenillard" de gauche à droite
+        Affichage d'une ligne selon un mode "chenillard" de gauche ï¿½ droite
         """
         CurrentTime=time.time()
         if time.time()-self.__temps > 0.2:
             self.__ite=self.__IncrementIte()
             self.__chaine=self.__ChDecalDG()
-            print "%s\r" %self.__chaine,
+            print("%s\r" %self.__chaine, end=' ')
             sys.stdout.flush()
             self.__temps=CurrentTime
 
@@ -166,48 +166,49 @@ class TraitEnCours:
         if time.time()-self.__temps > 0.4:
             self.__ite=self.__IncrementIte()
             if (self.__ite%2):
-                print "%s\r" %self.__chaine,
+                print("%s\r" %self.__chaine, end=' ')
             else:
-                print " "*self.__mod + "\r",
+                print(" "*self.__mod + "\r", end=' ')
             sys.stdout.flush()
             self.__temps=CurrentTime
 if __name__ == '__main__':
-    print "Module d'affichage d'un motif indiquant un 'Traitement en cours'"
+    print("Module d'affichage d'un motif indiquant un 'Traitement en cours'")
     temp=0
     a=TraitEnCours()
     a.StartIte()
-    print "Working (caractere)..."
+    print("Working (caractere)...")
     while temp < 30:
         temp+=1
         a.AffCar()
         time.sleep(0.1)
     a.StartIte()
     a.NewChaine('>12345  ')
-    print "Working (Ligne de Gauche a Droite)..."
+    print("Working (Ligne de Gauche a Droite)...")
     while temp < 60:
         temp+=1
         a.AffLigneGD()
         time.sleep(0.2)
     a.StartIte()
     a.NewChaine('12345<  ')
-    print "Working (Ligne de Droite a Gauche)..."
+    print("Working (Ligne de Droite a Gauche)...")
     while temp < 90:
         temp+=1
         a.AffLigneDG()
         time.sleep(0.2)
     a.NewChaine('Blinking')
-    print "Working (clignotement)..."
+    print("Working (clignotement)...")
     while temp < 120:
         temp+=1
         a.AffLigneBlink()
         time.sleep(0.2)
     a.NewChaine('Blinking a message too long for my small terminal which can only display 60 rows. So I must truncate it in the middle', LgMax=59, truncate=True)
-    print "Working (clignotement avec tronquature)"
+    print("Working (clignotement avec tronquature)")
     while temp < 150:
         temp+=1
         a.AffLigneBlink()
         time.sleep(0.2)
 
-    ToQuit=raw_input("Appuyer sur Entree pour quitter")
+    ToQuit=input("Appuyer sur Entree pour quitter")
+
 
 
