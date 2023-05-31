@@ -1,0 +1,13 @@
+[MASTER]
+disable=
+    C0114, # (missing-module-docstring)
+    C0115, # (missing-class-docstring)
+    C0116, # (missing-function-docstring)
+
+[FORMAT]
+# Maximum number of characters on a single line.
+max-line-length=120
+
+[BASIC]
+# Good variable names which should always be accepted, separated by a comma
+good-names=x,y
