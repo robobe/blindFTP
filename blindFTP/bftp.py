@@ -176,34 +176,34 @@ class Stats:
     def __init__(self):
         """Constructeur d'objet Stats."""
         self.num_session = -1
-        self.num_paquet_attendu = 0
-        self.nb_paquets_perdus = 0
+        self.expected_packet_num = 0
+        self.nb_packets_lost = 0
 
-    def ajouter_paquet (self, paquet):
+    def add_package (self, pack):
         """pour mettre � jour les stats en fonction du paquet."""
         # on v�rifie si on est toujours dans la m�me session, sinon RAZ
-        if paquet.num_session != self.num_session:
-            self.num_session = paquet.num_session
-            self.num_paquet_attendu = 0
-            self.nb_paquets_perdus = 0
+        if pack.num_session != self.num_session:
+            self.num_session = pack.num_session
+            self.expected_packet_num = 0
+            self.nb_packets_lost = 0
         # a-t-on perdu des paquets ?
-        if paquet.num_paquet_session != self.num_paquet_attendu:
-            self.nb_paquets_perdus += paquet.num_paquet_session - self.num_paquet_attendu
-        self.num_paquet_attendu = paquet.num_paquet_session + 1
+        if pack.num_paquet_session != self.expected_packet_num:
+            self.nb_packets_lost += pack.num_paquet_session - self.expected_packet_num
+        self.expected_packet_num = pack.num_paquet_session + 1
 
-    def taux_perte (self):
-        """calcule le taux de paquets perdus, en pourcentage"""
+    def loss_rate (self):
+        """calcule le taux de lost packets, en pourcentage"""
         # num_paquet_attendu correspond au nombre de paquets envoy�s de la session
-        if self.num_paquet_attendu > 0:
-            taux = (100 * self.nb_paquets_perdus) / self.num_paquet_attendu
+        if self.expected_packet_num > 0:
+            taux = (100 * self.nb_packets_lost) / self.expected_packet_num
         else:
             taux = 0
         return taux
 
     def print_stats (self):
         """affiche les stats"""
-        print ('Taux de perte: %d%%, paquets perdus: %d/%d' % (self.taux_perte(),
-            self.nb_paquets_perdus, self.num_paquet_attendu))
+        print ('loss rate: %d%%, lost packets: %d/%d' % (self.loss_rate(),
+            self.nb_packets_lost, self.expected_packet_num))
 
 #------------------------------------------------------------------------------
 # CHEMIN_INTERDIT
@@ -431,7 +431,7 @@ class Paquet:
                 raise ValueError(msg='taille de donnees incorrecte')
             self.donnees = paquet[taille_entete_complete:len(paquet)]
             # on mesure les stats, et on les affiche tous les 100 paquets
-            stats.ajouter_paquet(self)
+            stats.add_package(self)
             #if self.num_paquet_session % 100 == 0:
                 #stats.print_stats()
             # est-ce que le fichier est en cours de r�ception ?
@@ -554,26 +554,26 @@ class HeartBeat:
         #Variables locales
         self.hb_delay=HB_DELAY
         self.hb_numsession=0
-        self.hb_numpaquet=0
+        self.hb_packetnum=0
         self.hb_timeout=time.time()+1.25*(self.hb_delay)
 
     def newsession(self):
         """ initiate values for a new session """
         self.hb_numsession=int(time.time())
-        self.hb_numpaquet=0
-        return(self.hb_numsession, self.hb_numpaquet)
+        self.hb_packetnum=0
+        return(self.hb_numsession, self.hb_packetnum)
 
     def incsession(self):
         """ increment values in a existing session """
-        self.hb_numpaquet+=1
+        self.hb_packetnum+=1
         self.hb_timeout=time.time()+(self.hb_delay)
-        return(self.hb_numpaquet, self.hb_timeout)
+        return(self.hb_packetnum, self.hb_timeout)
 
     def print_heartbeat(self):
         """ Print internal values of heartbeat """
         print ("----- Current HeartBeart -----")
         print ("Session ID      : %d " %self.hb_numsession)
-        print ("Seq             : %d " %self.hb_numpaquet)
+        print ("Seq             : %d " %self.hb_packetnum)
         print ("Delay           : %d " %self.hb_delay)
         print ("Current Session : %s " %mtime2str(self.hb_numsession))
         print ("Next Timeout    : %s " %mtime2str(self.hb_timeout))
@@ -591,7 +591,7 @@ class HeartBeat:
                 # lost packet in a new session (reception start was too late)
                 else:
                     # TODO : v�rifier cas du redemarrage de la reception (valeurs locales � 0)
-                    if (self.hb_numpaquet==0 and self.hb_numsession==0):
+                    if (self.hb_packetnum==0 and self.hb_numsession==0):
                         msg = 'HeartBeat : reception redemaree'
                         logging.info(msg)
                     else:
@@ -601,12 +601,12 @@ class HeartBeat:
                 self.hb_numsession=num_session
         # lost packet identification
         else:
-            hb_lost=num_paquet-self.hb_numpaquet-1
+            hb_lost=num_paquet-self.hb_packetnum-1
             if bool(hb_lost) :
                 msg = 'HeartBeat : perte de %d paquet(s)' % hb_lost
                 logging.warn(msg)
         # Set new values
-        self.hb_numpaquet=num_paquet
+        self.hb_packetnum=num_paquet
         self.hb_timeout=time.time()+1.5*(delay)
         if msg != None:
             Console.Print_temp(msg, NL=True)
@@ -621,12 +621,12 @@ class HeartBeat:
             if self.hb_timeout < time.time():
                 Nbretard+=1
                 delta=time.time()-self.hb_timeout
-                msg = 'HeartBeat : Reception en attente ( %d ) ' % self.hb_numpaquet
+                msg = 'HeartBeat : Pending receipt ( %d ) ' % self.hb_packetnum
                 Console.Print_temp(msg, NL=False)
                 sys.stdout.flush()
                 time.sleep(self.hb_delay-1)
                 if Nbretard%10==0:
-                    msg = 'HeartBeat : Retard de reception ( %d ) - %d ' % (self.hb_numpaquet, Nbretard/10)
+                    msg = 'HeartBeat : Delay in receipt ( %d ) - %d ' % (self.hb_packetnum, Nbretard/10)
                     logging.warn(msg)
                     Console.Print_temp(msg, NL=True)
             else:
@@ -649,7 +649,7 @@ class HeartBeat:
         if num_session == None:
             num_session=self.hb_numsession
         if num_paquet == None:
-            num_paquet=self.hb_numpaquet
+            num_paquet=self.hb_packetnum
         if message == None:
             message="HeartBeat"
         taille_donnees=len(message)
