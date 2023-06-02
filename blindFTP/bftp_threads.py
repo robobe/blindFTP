@@ -18,75 +18,75 @@ Auteurs:
 - Philippe Lagadec (PL) - philippe.lagadec(a)laposte.net
 - Laurent Villemin (LV) - laurent.villemin(a)laposte.net
 
-Ce logiciel est régi par la licence CeCILL soumise au droit français et
+Ce logiciel est rï¿½gi par la licence CeCILL soumise au droit franï¿½ais et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
 utiliser, modifier et/ou redistribuer ce programme sous les conditions
-de la licence CeCILL telle que diffusée par le CEA, le CNRS et l'INRIA
+de la licence CeCILL telle que diffusï¿½e par le CEA, le CNRS et l'INRIA
 sur le site "http://www.cecill.info".
 
-En contrepartie de l'accessibilité au code source et des droits de copie,
-de modification et de redistribution accordés par cette licence, il n'est
-offert aux utilisateurs qu'une garantie limitée.  Pour les mêmes raisons,
-seule une responsabilité restreinte pèse sur l'auteur du programme,  le
-titulaire des droits patrimoniaux et les concédants successifs.
+En contrepartie de l'accessibilitï¿½ au code source et des droits de copie,
+de modification et de redistribution accordï¿½s par cette licence, il n'est
+offert aux utilisateurs qu'une garantie limitï¿½e.  Pour les mï¿½mes raisons,
+seule une responsabilitï¿½ restreinte pï¿½se sur l'auteur du programme,  le
+titulaire des droits patrimoniaux et les concï¿½dants successifs.
 
-A cet égard  l'attention de l'utilisateur est attirée sur les risques
-associés au chargement,  à l'utilisation,  à la modification et/ou au
-développement et à la reproduction du logiciel par l'utilisateur étant
-donné sa spécificité de logiciel libre, qui peut le rendre complexe à
-manipuler et qui le réserve donc à des développeurs et des professionnels
-avertis possédant  des  connaissances  informatiques approfondies.  Les
-utilisateurs sont donc invités à charger  et  tester  l'adéquation  du
-logiciel à leurs besoins dans des conditions permettant d'assurer la
-sécurité de leurs systèmes et ou de leurs données et, plus généralement,
-à l'utiliser et l'exploiter dans les mêmes conditions de sécurité.
+A cet ï¿½gard  l'attention de l'utilisateur est attirï¿½e sur les risques
+associï¿½s au chargement,  ï¿½ l'utilisation,  ï¿½ la modification et/ou au
+dï¿½veloppement et ï¿½ la reproduction du logiciel par l'utilisateur ï¿½tant
+donnï¿½ sa spï¿½cificitï¿½ de logiciel libre, qui peut le rendre complexe ï¿½
+manipuler et qui le rï¿½serve donc ï¿½ des dï¿½veloppeurs et des professionnels
+avertis possï¿½dant  des  connaissances  informatiques approfondies.  Les
+utilisateurs sont donc invitï¿½s ï¿½ charger  et  tester  l'adï¿½quation  du
+logiciel ï¿½ leurs besoins dans des conditions permettant d'assurer la
+sï¿½curitï¿½ de leurs systï¿½mes et ou de leurs donnï¿½es et, plus gï¿½nï¿½ralement,
+ï¿½ l'utiliser et l'exploiter dans les mï¿½mes conditions de sï¿½curitï¿½.
 
-Le fait que vous puissiez accéder à cet en-tête signifie que vous avez
-pris connaissance de la licence CeCILL, et que vous en avez accepté les
+Le fait que vous puissiez accï¿½der ï¿½ cet en-tï¿½te signifie que vous avez
+pris connaissance de la licence CeCILL, et que vous en avez acceptï¿½ les
 termes.
 """
 
 #------------------------------------------------------------------------------
 # HISTORIQUE:
-# 20/02/2005 v0.01 PL: - 1ère version (UFTP)
-# 23/02/2005 v0.02 PL: - réception de fichier fonctionnelle
+# 20/02/2005 v0.01 PL: - 1ï¿½re version (UFTP)
+# 23/02/2005 v0.02 PL: - rï¿½ception de fichier fonctionnelle
 # 24/02/2005 v0.03 PL: - synchronisation simple d'arborescence
 #                      - gestion des options avec optparse
-# 06/04/2005 v0.04 PL: - correction temporaire de synchro_arbo, à reprendre
+# 06/04/2005 v0.04 PL: - correction temporaire de synchro_arbo, ï¿½ reprendre
 # 21/04/2005 v0.05 PL: - correction d'un bug dans Fichier.annuler_fichier()
 #                        (close sur fichier temp non ouvert)
 #                      - ajout de chemin_interdit() pour filtrer les chemins
 #                        interdits: chemins absolus, contenant "..", ...
 #                      - ajout options -b (boucle) et -P (pause)
-#                      - classe LimiteurDebit pour contrôler le débit d'envoi
+#                      - classe LimiteurDebit pour contrï¿½ler le dï¿½bit d'envoi
 #                      - correction des chemins relatifs dans synchro_arbo
 #                      - ajout print_oem, str_oem et str_lat1 pour corriger les
-#                        problèmes dûs aux noms de fichiers avec accents
-# 06/07/2005 v0.06 PL: - réception simultanée de plusieurs fichiers, avec
+#                        problï¿½mes dï¿½s aux noms de fichiers avec accents
+# 06/07/2005 v0.06 PL: - rï¿½ception simultanï¿½e de plusieurs fichiers, avec
 #                        gestion de la redondance (multiples fichiers temporaires,
-#                        et gestion de paquets arrivant dans le désordre)
-#                        --> modification complète du protocole et format des paquets
+#                        et gestion de paquets arrivant dans le dï¿½sordre)
+#                        --> modification complï¿½te du protocole et format des paquets
 #                      - correction bug augmenter_priorite sous Unix
-#                      - UFTP renommé en BlindFTP
-# 11/07/2005 v0.07 PL: - correction d'un bug lié aux accents dans envoyer()
-#                      - gestion (très spartiate) des exceptions
-#                      - début de journalisation dans un fichier bftp.log
-# 18/07/2005 v0.08 PL: - affichage du nom de fichier en cours de réception même si ignoré
-# 18/07/2005 v0.09 PL: - affichage de l'heure pour chaque réception de fichier
-#                      - correction d'un bug lié aux accents dans les logs
+#                      - UFTP renommï¿½ en BlindFTP
+# 11/07/2005 v0.07 PL: - correction d'un bug liï¿½ aux accents dans envoyer()
+#                      - gestion (trï¿½s spartiate) des exceptions
+#                      - dï¿½but de journalisation dans un fichier bftp.log
+# 18/07/2005 v0.08 PL: - affichage du nom de fichier en cours de rï¿½ception mï¿½me si ignorï¿½
+# 18/07/2005 v0.09 PL: - affichage de l'heure pour chaque rï¿½ception de fichier
+#                      - correction d'un bug liï¿½ aux accents dans les logs
 #                      - affichage complet des exceptions Python
-# 21/07/2005 v0.10 PL: - format de paquet v3: ajout n°session et compteur de paquet
-#                      - classe Stats pour mesurer taux de perte, débit effectif, ...
-# 03/08/2005 v0.11 PL: - import Console pour améliorer l'affichage (à poursuivre)
-#                      - ajout CRC32 d'un fichier pour détecter d'éventuels fichiers
+# 21/07/2005 v0.10 PL: - format de paquet v3: ajout nï¿½session et compteur de paquet
+#                      - classe Stats pour mesurer taux de perte, dï¿½bit effectif, ...
+# 03/08/2005 v0.11 PL: - import Console pour amï¿½liorer l'affichage (ï¿½ poursuivre)
+#                      - ajout CRC32 d'un fichier pour dï¿½tecter d'ï¿½ventuels fichiers
 #                        corrompus
 #                      - correction tests sys.platform() == 'win32'
 # 04/10/2005 v0.12 LV: - optimisation de l'algorithme de synchro d'arborescence
 #                        priorisation aux fichiers les moins souvent transmis
-# 22/02/2006 v0.13 LV: - optimisation des synchro (vérification que les fichiers à
-#                        émettre sont stables)
+# 22/02/2006 v0.13 LV: - optimisation des synchro (vï¿½rification que les fichiers ï¿½
+#                        ï¿½mettre sont stables)
 # 04/03/2007 v0.14 PL: - verif import pywin32 et path
-#                      - correction mot-clé "global"
+#                      - correction mot-clï¿½ "global"
 #                      - correction limiteur_debit dans synchro_arbo
 #                      - conversion tabs en espaces et corrections mineures
 # 05/03/2007 v0.15 PL: - (re)correction limiteur_debit dans synchro_arbo
@@ -97,7 +97,7 @@ termes.
 #                        transmission multifichiers pour synchro de grosses arborescences
 #                        comme un repository linux
 # 03/02/2008 v0.20 LV: - Refonte complete de la synchro (utilisation de ElementTree)
-#                      - Sauvegarde de l'état de transmission dans un fichier XML
+#                      - Sauvegarde de l'ï¿½tat de transmission dans un fichier XML
 #                      - Option mode reprise
 # 07/02/2008 v0.21 LV: - extraction du code XFL et import du module
 # 10/02/2008 v0.22 LV: - correction bug 546 : Modification de l'entete pour supporter les fichiers de 4.5G et plus
@@ -113,11 +113,11 @@ termes.
 #
 #------------------------------------------------------------------------------
 # A FAIRE:
-# - améliorer le multithreading (lock sur fichier et non sur chaque paquet)
+# - amï¿½liorer le multithreading (lock sur fichier et non sur chaque paquet)
 # - corriger affichage de l'aide (UnicodeError)
-# - mettre les extensions de fichiers à exclure dans une liste paramétrable
+# - mettre les extensions de fichiers ï¿½ exclure dans une liste paramï¿½trable
 # - fichier de config style .ini
-# - reprendre la gestion des numéros de session avec l'ordonnanceur de synchro_arbo
+# - reprendre la gestion des numï¿½ros de session avec l'ordonnanceur de synchro_arbo
 
 
 #=== IMPORTS ==================================================================
@@ -130,7 +130,7 @@ import binascii
 import threading
 from SocketServer import *
 
-# modules spécifiques à Windows:
+# modules spï¿½cifiques ï¿½ Windows:
 if sys.platform == 'win32':
     try:
         import win32api, win32process
@@ -171,11 +171,11 @@ import TraitEncours
 NOM_SCRIPT = os.path.basename(__file__)    # nom du fichier contenant ce script
 
 # TODO : Bug sur la taille max sous MacOS a resoudre
-TAILLE_PAQUET = 65500   # taille max d'un paquet réseau
+TAILLE_PAQUET = 65500   # taille max d'un paquet rï¿½seau
 
-MODE_DEBUG = True   # contrôle si les messages de debug() s'affichent
+MODE_DEBUG = True   # contrï¿½le si les messages de debug() s'affichent
 
-RACINE_TEMP = "temp"    # racine pour créer les répertoires temporaires
+RACINE_TEMP = "temp"    # racine pour crï¿½er les rï¿½pertoires temporaires
 
 MAX_NOM_FICHIER = 1024  # taille max pour le nom d'un fichier (en octets)
 
@@ -184,22 +184,22 @@ IgnoreExtensions = ('.part', '.tmp', '.ut')
 # Correction du bug sur taille des fichiers de plus de 4.5 Go
 #      Modification de la structute (taille + offset de Int(I) en Long Long (Q))
 
-# Entête d'un paquet BFTP (format v4):
+# Entï¿½te d'un paquet BFTP (format v4):
 # (cf. aide du module struct pour les codes)
 # - type de paquet: uchar=B
 # - longueur du nom de fichier (+chemin): uchar=B
-# - longueur des données du fichier dans le paquet: uint16=H
-# - offset, position des données dans le fichier: Long Long =Q
-# - numéro de session: uint32=I
-# - n° de paquet dans la session: uint32=I
-# - n° de paquet du fichier: uint32=I
+# - longueur des donnï¿½es du fichier dans le paquet: uint16=H
+# - offset, position des donnï¿½es dans le fichier: Long Long =Q
+# - numï¿½ro de session: uint32=I
+# - nï¿½ de paquet dans la session: uint32=I
+# - nï¿½ de paquet du fichier: uint32=I
 # - nombre de paquets pour le fichier: uint32=I
 # - longueur du fichier (en octets): Long Long=Q
 # - date du fichier (en secondes depuis epoch): uint32=I
-# - CRC32 du fichier: int32=i (signé)
-# (suivi du nom du fichier, puis des données)
+# - CRC32 du fichier: int32=i (signï¿½)
+# (suivi du nom du fichier, puis des donnï¿½es)
 FORMAT_ENTETE = "BBHQIIIIQIi"
-# Correction bug 557 : taille du format diffère selon les OS
+# Correction bug 557 : taille du format diffï¿½re selon les OS
 TAILLE_ENTETE = struct.calcsize(FORMAT_ENTETE)
 # taille : Win32 (48) ; Linux (44) ; MacOSX PPC (44)
 
@@ -209,7 +209,7 @@ PAQUET_REPERTOIRE   = 1
 PAQUET_KEEPALIVE    = 10
 
 
-# Complement d'attributs à XLF
+# Complement d'attributs ï¿½ XLF
 ATTR_CRC = "crc"
 ATTR_NBSEND = "NbSend"
 ATTR_LASTVIEW = "LastView"
@@ -218,12 +218,12 @@ ATTR_LASTSEND = "LastSend"
 # Lock pour gerer les threads dans BlindFTPServer:
 lock_paquet = threading.Lock()
 
-#=== Valeurs à traiter au sein du fichier .ini in fine ========================
+#=== Valeurs ï¿½ traiter au sein du fichier .ini in fine ========================
 # Vitesse / redondance sont a ajuster selon
-#    le taux de perte constaté empiriquement (trop vite = des paquets perdus,
-#    trop lentement = faible réactivité et parcours de l'arborescence trop long)
+#    le taux de perte constatï¿½ empiriquement (trop vite = des paquets perdus,
+#    trop lentement = faible rï¿½activitï¿½ et parcours de l'arborescence trop long)
 #
-# Redondance d'émission des fichiers
+# Redondance d'ï¿½mission des fichiers
 MinFileRedundancy=5
 
 #=== VARIABLES GLOBALES =======================================================
@@ -232,7 +232,7 @@ MinFileRedundancy=5
 global options
 options = None
 
-# dictionnaire des fichiers en cours de réception
+# dictionnaire des fichiers en cours de rï¿½ception
 global fichiers
 fichiers = {}
 
@@ -244,9 +244,9 @@ stats = None
 #-------------------
 def str_lat1 (chaine, errors='strict'):
     """
-    pour convertir une chaîne unicode en chaîne de type str au format "Latin-1"
-    --> Bidouille infâme nécessaire pour éviter une UnicodeDecodeError quand
-        une chaîne contient des accents et qu'on utilise fichier.write(chaine)
+    pour convertir une chaï¿½ne unicode en chaï¿½ne de type str au format "Latin-1"
+    --> Bidouille infï¿½me nï¿½cessaire pour ï¿½viter une UnicodeDecodeError quand
+        une chaï¿½ne contient des accents et qu'on utilise fichier.write(chaine)
     """
     return str(chaine.encode('latin_1', errors))
 
@@ -255,9 +255,9 @@ def str_lat1 (chaine, errors='strict'):
 #-------------------
 def str_oem (chaine, errors='strict'):
     """
-    pour convertir une chaîne unicode en chaîne de type str au format "CP850" (MS-DOS OEM)
-    --> Bidouille infâme nécessaire pour éviter une UnicodeDecodeError quand
-        une chaîne contient des accents et qu'on utilise fichier.write(chaine)
+    pour convertir une chaï¿½ne unicode en chaï¿½ne de type str au format "CP850" (MS-DOS OEM)
+    --> Bidouille infï¿½me nï¿½cessaire pour ï¿½viter une UnicodeDecodeError quand
+        une chaï¿½ne contient des accents et qu'on utilise fichier.write(chaine)
     """
     return str(chaine.encode('cp850', errors))
 
@@ -266,7 +266,7 @@ def str_oem (chaine, errors='strict'):
 #-------------------
 def print_oem (chaine, errors='strict'):
     """
-    Pour afficher correctement une chaîne contenant des accents sur un
+    Pour afficher correctement une chaï¿½ne contenant des accents sur un
     terminal cmd de Windows. (conversion en page de code "cp850")
     Affichage simple sans conversion si on n'est pas sous Windows.
     """
@@ -279,7 +279,7 @@ def print_oem (chaine, errors='strict'):
 # str_ajuste
 #-------------------
 def str_ajuste (chaine, longueur=79):
-    """ajuste la chaine pour qu'elle fasse exactement la longueur indiquée,
+    """ajuste la chaine pour qu'elle fasse exactement la longueur indiquï¿½e,
     en coupant ou en remplissant avec des espaces."""
     l = len(chaine)
     if l>longueur:
@@ -305,7 +305,7 @@ def debug(texte):
 def exit_aide():
     "Affiche un texte d'aide en cas d'erreur."
 
-    # on affiche la docstring (en début de ce fichier) qui contient l'aide.
+    # on affiche la docstring (en dï¿½but de ce fichier) qui contient l'aide.
     print __doc__
     sys.exit(1)
 
@@ -334,8 +334,8 @@ class Stats:
         self.nb_paquets_perdus = 0
 
     def ajouter_paquet (self, paquet):
-        """pour mettre à jour les stats en fonction du paquet."""
-        # on vérifie si on est toujours dans la même session, sinon RAZ
+        """pour mettre ï¿½ jour les stats en fonction du paquet."""
+        # on vï¿½rifie si on est toujours dans la mï¿½me session, sinon RAZ
         if paquet.num_session != self.num_session:
             self.num_session = paquet.num_session
             self.num_paquet_attendu = 0
@@ -347,7 +347,7 @@ class Stats:
 
     def taux_perte (self):
         """calcule le taux de paquets perdus, en pourcentage"""
-        # num_paquet_attendu correspond au nombre de paquets envoyés de la session
+        # num_paquet_attendu correspond au nombre de paquets envoyï¿½s de la session
         if self.num_paquet_attendu > 0:
             taux = (100 * self.nb_paquets_perdus) / self.num_paquet_attendu
         else:
@@ -364,7 +364,7 @@ class Stats:
 #-------------------
 
 def chemin_interdit (chemin):
-    """Vérifie si le chemin de fichier demandé est interdit, par exemple
+    """Vï¿½rifie si le chemin de fichier demandï¿½ est interdit, par exemple
     s'il s'agit d'un chemin absolu, s'il contient "..", etc..."""
     # si chemin n'est pas une chaine on le convertit:
 #   if not isinstance(chemin, str):
@@ -378,7 +378,7 @@ def chemin_interdit (chemin):
     # est-ce qu'il contient ".." ?
     if ".." in chemin:
         return True
-    # A AJOUTER: vérifier si codage unicode, ou autre ??
+    # A AJOUTER: vï¿½rifier si codage unicode, ou autre ??
     # Sinon c'est OK, le chemin est valide:
     return False
 
@@ -387,7 +387,7 @@ def chemin_interdit (chemin):
 #-------------------
 
 class Fichier:
-    """classe représentant un fichier en cours de réception."""
+    """classe reprï¿½sentant un fichier en cours de rï¿½ception."""
 
     def __init__(self, paquet):
         """Constructeur d'objet Fichier.
@@ -401,34 +401,34 @@ class Fichier:
         # chemin du fichier destination
         self.fichier_dest = CHEMIN_DEST / self.nom_fichier
         debug('fichier_dest = "%s"' % self.fichier_dest)
-        # on crée le fichier temporaire (objet file):
+        # on crï¿½e le fichier temporaire (objet file):
         self.fichier_temp = tempfile.NamedTemporaryFile(prefix='BFTP_')
         debug('fichier_temp = "%s"' % self.fichier_temp.name)
         self.paquets_recus = TabBits.TabBits(self.nb_paquets)
         #print 'Reception du fichier "%s"...' % self.nom_fichier
-        self.est_termine = False    # flag indiquant une réception complète
+        self.est_termine = False    # flag indiquant une rï¿½ception complï¿½te
         self.crc32 = paquet.crc32 # CRC32 du fichier
         # on ne doit pas traiter le paquet automatiquement, sinon il peut
-        # y avoir des problèmes d'ordre des actions
+        # y avoir des problï¿½mes d'ordre des actions
         #self.traiter_paquet(paquet)
 
 
     def annuler_reception(self):
-        "pour annuler la réception d'un fichier en cours."
+        "pour annuler la rï¿½ception d'un fichier en cours."
         # on ferme et on supprime le fichier temporaire
         # seulement s'il est effectivement ouvert
-        # (sinon à l'initialisation c'est un entier)
+        # (sinon ï¿½ l'initialisation c'est un entier)
         if isinstance(self.fichier_temp, file):
             if not self.fichier_temp.closed:
                 self.fichier_temp.close()
-        # d'après la doc de tempfile, le fichier est automatiquement supprimé
+        # d'aprï¿½s la doc de tempfile, le fichier est automatiquement supprimï¿½
         #os.remove(self.nom_temp)
         debug('Reception de fichier annulee.')
 
     def recopier_destination(self):
-        "pour recopier le fichier à destination une fois qu'il est terminé."
+        "pour recopier le fichier ï¿½ destination une fois qu'il est terminï¿½."
         print 'OK, fichier termine.'
-        # créer le chemin destination si besoin avec makedirs
+        # crï¿½er le chemin destination si besoin avec makedirs
         chemin_dest = self.fichier_dest.dirname()
         if not os.path.exists(chemin_dest):
             chemin_dest.makedirs()
@@ -438,11 +438,11 @@ class Fichier:
         # recopier le fichier temporaire au bon endroit
         debug('Recopie de %s vers %s...' % (self.fichier_temp.name, self.fichier_dest))
         # move(self.nom_temp, self.fichier_dest)
-        # on revient au début
+        # on revient au dï¿½but
         self.fichier_temp.seek(0)
         f_dest = file(self.fichier_dest, 'wb')
         buffer = self.fichier_temp.read(16384)
-        # on démarre le calcul de CRC32:
+        # on dï¿½marre le calcul de CRC32:
         crc32 = binascii.crc32(buffer)
         while len(buffer) != 0:
             f_dest.write(buffer)
@@ -450,72 +450,72 @@ class Fichier:
             # poursuite du calcul de CRC32:
             crc32 = binascii.crc32(buffer, crc32)
         f_dest.close()
-        # vérifier si la taille obtenue est correcte
+        # vï¿½rifier si la taille obtenue est correcte
         if self.fichier_dest.getsize() != self.taille_fichier:
             debug ("taille_fichier = %d, taille obtenue = %d" %
                    (self.taille_fichier, self.fichier_dest.getsize()) )
             logging.error('Taille du fichier incorrecte: "%s"'% self.nom_fichier)
             raise IOError, 'taille du fichier incorrecte.'
-        # vérifier si le checksum CRC32 est correct
+        # vï¿½rifier si le checksum CRC32 est correct
         if self.crc32 != crc32:
             debug ("CRC32 fichier = %X, CRC32 attendu = %X" %
                    (crc32, self.crc32))
             logging.error('Controle d\'integrite incorrect: "%s"'% self.nom_fichier)
             raise IOError, "controle d'integrite incorrect."
-        # mettre à jour la date de modif: tuple (atime,mtime)
+        # mettre ï¿½ jour la date de modif: tuple (atime,mtime)
         self.fichier_dest.utime( (self.date_fichier, self.date_fichier) )
         # fermer le fichier temporaire
         self.fichier_temp.close()
-        # d'après la doc de tempfile, le fichier est automatiquement supprimé
+        # d'aprï¿½s la doc de tempfile, le fichier est automatiquement supprimï¿½
         self.fichier_en_cours = False
 
     def traiter_paquet(self, paquet):
         "pour traiter un paquet contenant un morceau du fichier."
-        # on vérifie si le paquet n'a pas déjà été reçu
+        # on vï¿½rifie si le paquet n'a pas dï¿½jï¿½ ï¿½tï¿½ reï¿½u
         if not self.paquets_recus.get (paquet.num_paquet):
-            # c'est un nouveau paquet: il faut l'écrire dans le fichier temporaire
-            # on calcule l'offset dans le fichier, en considérant que chaque
-            # paquet contient la même longueur de données:
+            # c'est un nouveau paquet: il faut l'ï¿½crire dans le fichier temporaire
+            # on calcule l'offset dans le fichier, en considï¿½rant que chaque
+            # paquet contient la mï¿½me longueur de donnï¿½es:
             #offset = paquet.num_paquet * paquet.taille_donnees
             #debug("offset = %d" % offset)
             self.fichier_temp.seek(paquet.offset)
-            # note: si on déplace le curseur après la fin réelle du fichier,
-            # celui-ci est complété d'octets nuls, ce qui nous arrange bien :-).
+            # note: si on dï¿½place le curseur aprï¿½s la fin rï¿½elle du fichier,
+            # celui-ci est complï¿½tï¿½ d'octets nuls, ce qui nous arrange bien :-).
             self.fichier_temp.write(paquet.donnees)
             debug("offset apres = %d" % self.fichier_temp.tell())
             self.paquets_recus.set(paquet.num_paquet, True)
             pourcent = 100*(self.paquets_recus.nb_true)/self.nb_paquets
-            # affichage du pourcentage: la virgule évite un retour chariot
+            # affichage du pourcentage: la virgule ï¿½vite un retour chariot
             print "%d%%\r" % pourcent,
-            # pour forcer la mise à jour de l'affichage
+            # pour forcer la mise ï¿½ jour de l'affichage
             sys.stdout.flush()
-            # si le fichier est terminé, on le recopie à destination:
+            # si le fichier est terminï¿½, on le recopie ï¿½ destination:
             if self.paquets_recus.nb_true == self.nb_paquets:
-                # on va à la ligne
+                # on va ï¿½ la ligne
                 #print ""
-                # Mise en thead de la recopie afin de liberer de la ressource pour la réception
+                # Mise en thead de la recopie afin de liberer de la ressource pour la rï¿½ception
                 recopie=threading.Thread(None, self.recopier_destination, None,())
                 recopie.start()
-                # TODO : reporter les affichages ci-dessous au sein de la fonction mise en thread et "ignorer" les données recu jusqu'à fin du thread
+                # TODO : reporter les affichages ci-dessous au sein de la fonction mise en thread et "ignorer" les donnï¿½es recu jusqu'ï¿½ fin du thread
                 debug ("Fichier termine.")
                 logging.info('Fichier "%s" recu en entier, recopie a destination.'% self.nom_fichier)
                 # dans ce cas on retire le fichier du dictionnaire
                 self.est_termine = True
                 del fichiers[self.nom_fichier]
-                # ...et on suppose qu'il n'y a plus d'autres références:
-                # le garbage collector devrait le supprimer de la mémoire.
+                # ...et on suppose qu'il n'y a plus d'autres rï¿½fï¿½rences:
+                # le garbage collector devrait le supprimer de la mï¿½moire.
 
 #------------------------------------------------------------------------------
 # classe PAQUET
 #-------------------
 
 class Paquet:
-    """classe représentant un paquet BFTP, permettant la construction et le
-    décodage du paquet."""
+    """classe reprï¿½sentant un paquet BFTP, permettant la construction et le
+    dï¿½codage du paquet."""
 
     def __init__(self):
         "Constructeur d'objet Paquet BFTP."
-        # on initialise les infos contenues dans l'entête du paquet
+        # on initialise les infos contenues dans l'entï¿½te du paquet
         self.type_paquet = PAQUET_FICHIER
         self.longueur_nom = 0
         self.taille_donnees = 0
@@ -531,8 +531,8 @@ class Paquet:
         self.num_paquet_session = -1
 
     def decoder(self, paquet):
-        "Pour décoder un paquet BFTP."
-        # on décode d'abord l'entête (cf. début de ce fichier):
+        "Pour dï¿½coder un paquet BFTP."
+        # on dï¿½code d'abord l'entï¿½te (cf. dï¿½but de ce fichier):
         entete = paquet[0:TAILLE_ENTETE]
         (
             self.type_paquet,
@@ -565,8 +565,8 @@ class Paquet:
         if self.offset + self.taille_donnees > self.taille_fichier:
             raise ValueError, 'offset ou taille des donnees incorrects'
         self.nom_fichier = paquet[TAILLE_ENTETE : TAILLE_ENTETE + self.longueur_nom]
-        # conversion en Latin1 pour éviter problèmes dûs aux accents
-        # A VOIR: seulement sous Windows ?? (sous Mac ça pose problème...)
+        # conversion en Latin1 pour ï¿½viter problï¿½mes dï¿½s aux accents
+        # A VOIR: seulement sous Windows ?? (sous Mac ï¿½a pose problï¿½me...)
         if sys.platform == 'win32':
             self.nom_fichier = self.nom_fichier.decode('latin_1')
         ##debug("nom_fichier    = %s" % self.nom_fichier)
@@ -583,18 +583,18 @@ class Paquet:
         stats.ajouter_paquet(self)
         #if self.num_paquet_session % 100 == 0:
             #stats.print_stats()
-        # est-ce que le fichier est en cours de réception ?
+        # est-ce que le fichier est en cours de rï¿½ception ?
         if self.nom_fichier in fichiers:
             debug("Fichier en cours de reception")
             f = fichiers[self.nom_fichier]
-            # on vérifie si le fichier n'a pas changé:
+            # on vï¿½rifie si le fichier n'a pas changï¿½:
             if f.date_fichier != self.date_fichier \
             or f.taille_fichier != self.taille_fichier \
             or f.crc32 != self.crc32:
-                # on commence par annuler la réception en cours:
+                # on commence par annuler la rï¿½ception en cours:
                 f.annuler_reception()
                 del fichiers[self.nom_fichier]
-                # puis on recrée un nouvel objet fichier d'après les infos du paquet:
+                # puis on recrï¿½e un nouvel objet fichier d'aprï¿½s les infos du paquet:
                 self.nouveau_fichier()
             else:
                 if self.fichier_en_cours != self.nom_fichier:
@@ -608,11 +608,11 @@ class Paquet:
                     self.fichier_en_cours = self.nom_fichier
                 f.traiter_paquet(self)
         else:
-            # est-ce que le fichier existe déjà sur le disque ?
+            # est-ce que le fichier existe dï¿½jï¿½ sur le disque ?
             fichier_dest = CHEMIN_DEST / self.nom_fichier
             ##debug('fichier_dest = "%s"' % fichier_dest)
-            # si la date et la taille du fichier n'ont pas changé,
-            # inutile de recréer le fichier, on l'ignore:
+            # si la date et la taille du fichier n'ont pas changï¿½,
+            # inutile de recrï¿½er le fichier, on l'ignore:
             if  fichier_dest.exists() \
             and fichier_dest.getsize() == self.taille_fichier \
             and fichier_dest.getmtime() == self.date_fichier:
@@ -623,11 +623,11 @@ class Paquet:
                 Console.Print_temp(msg)
                 sys.stdout.flush()
             else:
-                # sinon on crée un nouvel objet fichier d'après les infos du paquet:
+                # sinon on crï¿½e un nouvel objet fichier d'aprï¿½s les infos du paquet:
                 self.nouveau_fichier()
 
     def nouveau_fichier (self):
-        "pour débuter la réception d'un nouveau fichier."
+        "pour dï¿½buter la rï¿½ception d'un nouveau fichier."
         msg = 'Reception de "%s"...' % self.nom_fichier
         heure = time.strftime('%d/%m %H:%M ')
         #msg = str_ajuste(msg)+'\r'
@@ -636,13 +636,13 @@ class Paquet:
         logging.info(msg)
         self.fichier_en_cours = self.nom_fichier
         debug("Nouveau fichier ou fichier mis a jour")
-        # on crée un nouvel objet fichier d'après les infos du paquet:
+        # on crï¿½e un nouvel objet fichier d'aprï¿½s les infos du paquet:
         nouveau_fichier = Fichier(self)
         fichiers[self.nom_fichier] = nouveau_fichier
         nouveau_fichier.traiter_paquet(self)
 
     def construire(self):
-        "pour construire un paquet BFTP à partir des paramètres. (non implémenté)"
+        "pour construire un paquet BFTP ï¿½ partir des paramï¿½tres. (non implï¿½mentï¿½)"
         raise NotImplementedError
 
 
@@ -651,27 +651,27 @@ class Paquet:
 #-------------------
 
 class LimiteurDebit:
-    "pour controler le débit d'envoi de données."
+    "pour controler le dï¿½bit d'envoi de donnï¿½es."
 
     def __init__(self, debit):
         """contructeur de classe LimiteurDebit.
 
-        debit : débit maximum autorisé, en Kbps."""
-        # débit en Kbps converti en octets/s
+        debit : dï¿½bit maximum autorisï¿½, en Kbps."""
+        # dï¿½bit en Kbps converti en octets/s
         self.debit_max = debit*1000/8
         debug ("LimiteurDebit: debit_max = %d octets/s" % self.debit_max)
-        # on stocke le temps de départ
+        # on stocke le temps de dï¿½part
         self.temps_debut = time.time()
-        # nombre d'octets déjà transféré
+        # nombre d'octets dï¿½jï¿½ transfï¿½rï¿½
         self.octets_envoyes = 0
 
     def depart_chrono(self):
-        "pour (re)démarrer la mesure du débit."
+        "pour (re)dï¿½marrer la mesure du dï¿½bit."
         self.temps_debut = time.time()
         self.octets_envoyes = 0
 
     def ajouter_donnees(self, octets):
-        "pour ajouter un nombre d'octets envoyés."
+        "pour ajouter un nombre d'octets envoyï¿½s."
         self.octets_envoyes += octets
 
     def temps_total(self):
@@ -679,22 +679,22 @@ class LimiteurDebit:
         return (time.time() - self.temps_debut)
 
     def debit_moyen(self):
-        "donne le débit moyen mesuré, en octets/s."
+        "donne le dï¿½bit moyen mesurï¿½, en octets/s."
         temps_total = self.temps_total()
-        if temps_total == 0: return 0   # pour éviter division par zéro
+        if temps_total == 0: return 0   # pour ï¿½viter division par zï¿½ro
         debit_moyen = self.octets_envoyes / temps_total
         return debit_moyen
 
     def limiter_debit(self):
-        "pour faire une pause afin de respecter le débit maximum."
-        # on fait des petites pauses (10 ms) tant que le débit est trop élevé:
+        "pour faire une pause afin de respecter le dï¿½bit maximum."
+        # on fait des petites pauses (10 ms) tant que le dï¿½bit est trop ï¿½levï¿½:
         while self.debit_moyen() > self.debit_max:
             time.sleep(0.01)
-        # méthode alternative qui ne fonctionne pas très bien
-        # (donne souvent des temps de pause négatifs !)
+        # mï¿½thode alternative qui ne fonctionne pas trï¿½s bien
+        # (donne souvent des temps de pause nï¿½gatifs !)
 #       temps_total = self.temps_total()
 #       debit_moyen = self.debit_moyen()
-#       # si on dépasse le débit max, on calcule la pause:
+#       # si on dï¿½passe le dï¿½bit max, on calcule la pause:
 #       if debit_moyen > self.debit_max:
 #           pause = self.octets_envoyes/self.debit_max - temps_total
 #           if pause>0:
@@ -703,12 +703,12 @@ class LimiteurDebit:
 
 
 # Code inspire de http://www.drbeat.li/pycgi/webutil.py/html?py=py/syslogd.py.txt
-# creuser le fonctionnement en thread : le programme de réception en thread semble moins performant
+# creuser le fonctionnement en thread : le programme de rï¿½ception en thread semble moins performant
 # que dans la version sans thread
-# sur une arborescence de 20 fichiers à la premier itération :
+# sur une arborescence de 20 fichiers ï¿½ la premier itï¿½ration :
 # bftp_thread : 2 fichiers recus partiellement
 # bftp classic :  18 recu entierement, 1 partiel, 1 non vu
-# tests à poursuivre
+# tests ï¿½ poursuivre
 #
 class InterruptibleServer:
     "Mix-in class for {TCP,UDP}Server that allows to stop the service"
@@ -729,7 +729,7 @@ class InterruptibleServer:
 class BlindFTPServer(ThreadingUDPServer, InterruptibleServer):
     """
     Classe pour un serveur BlindFTP multithreads.
-    (basé sur ThreadingUDPServer)
+    (basï¿½ sur ThreadingUDPServer)
     """
 
     def __init__(self, addr='', port=36016):
@@ -742,8 +742,8 @@ class BlindFTPServer(ThreadingUDPServer, InterruptibleServer):
 
     def finish_request(self, (paquet, sock), emetteur):
         """
-        Traitement d'un datagramme UDP: Chaque paquet est traité par un thread
-        séparé.
+        Traitement d'un datagramme UDP: Chaque paquet est traitï¿½ par un thread
+        sï¿½parï¿½.
         """
         if not paquet: return
         debug("")
@@ -751,8 +751,8 @@ class BlindFTPServer(ThreadingUDPServer, InterruptibleServer):
         #print paquet
         try:
             # avec lock_paquet, on s'assure qu'un seul thread traite un paquet
-            # à un moment donné.
-            # (pour éviter l'accès simultané à un même fichier et à l'objet p)
+            # ï¿½ un moment donnï¿½.
+            # (pour ï¿½viter l'accï¿½s simultanï¿½ ï¿½ un mï¿½me fichier et ï¿½ l'objet p)
             with lock_paquet:
                 self.p.decoder (paquet)
         except:
@@ -768,7 +768,7 @@ class BlindFTPServer(ThreadingUDPServer, InterruptibleServer):
 
 def recevoir(repertoire):
     """Pour recevoir les paquets UDP BFTP contenant les fichiers, et stocker
-    les fichiers reçus dans le répertoire indiqué en paramètre."""
+    les fichiers reï¿½us dans le rï¿½pertoire indiquï¿½ en paramï¿½tre."""
 
     # bidouille: on change le contenu de la variable globale
     CHEMIN_DEST = repertoire
@@ -789,11 +789,11 @@ def CalcCRC(fichier):
     MonAff=TraitEncours.TraitEnCours()
     MonAff.StartIte()
     chaine=" Calcul CRC32 " + fichier
-    MonAff.NewChaine(chaine)
+    MonAff.new_channel(chaine)
     try:
         f = open(fichier, 'rb')
         buffer = f.read(16384)
-        # on démarre le calcul de CRC32:
+        # on dï¿½marre le calcul de CRC32:
         crc32 = binascii.crc32(buffer)
         while len(buffer) != 0:
             buffer = f.read(16384)
@@ -814,12 +814,12 @@ def CalcCRC(fichier):
 
 def envoyer(fichier_source, fichier_dest, limiteur_debit=None, num_session=None,
     num_paquet_session=None, crc=None):
-    """Pour émettre un fichier en paquets UDP BFTP.
+    """Pour ï¿½mettre un fichier en paquets UDP BFTP.
 
     fichier_source : chemin du fichier source sur le disque local
-    fichier_dest   : chemin relatif du fichier dans le répertoire destination
-    limiteur_debit : pour limiter le débit d'envoi
-    num_session    : numéro de session
+    fichier_dest   : chemin relatif du fichier dans le rï¿½pertoire destination
+    limiteur_debit : pour limiter le dï¿½bit d'envoi
+    num_session    : numï¿½ro de session
     num_paquet_session : compteur de paquets
     """
 
@@ -845,12 +845,12 @@ def envoyer(fichier_source, fichier_dest, limiteur_debit=None, num_session=None,
         crc32=CalcCRC(fichier_source)
     else:
         crc32=crc
-    # taille restant pour les données dans un paquet normal
+    # taille restant pour les donnï¿½es dans un paquet normal
     taille_donnees_max = TAILLE_PAQUET - TAILLE_ENTETE - longueur_nom
     debug("taille_donnees_max = %d" % taille_donnees_max)
     nb_paquets = (taille_fichier + taille_donnees_max-1) / taille_donnees_max
     if nb_paquets == 0:
-        # si le fichier est vide, il faut quand même envoyer un paquet
+        # si le fichier est vide, il faut quand mï¿½me envoyer un paquet
         nb_paquets = 1
     debug("nb_paquets = %d" % nb_paquets)
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -862,7 +862,7 @@ def envoyer(fichier_source, fichier_dest, limiteur_debit=None, num_session=None,
             limiteur_debit = LimiteurDebit(options.debit)
         limiteur_debit.depart_chrono()
         for num_paquet in range(0, nb_paquets):
-            # on fait une pause si besoin pour limiter le débit
+            # on fait une pause si besoin pour limiter le dï¿½bit
             limiteur_debit.limiter_debit()
             if reste_a_envoyer > taille_donnees_max:
                 taille_donnees = taille_donnees_max
@@ -890,7 +890,7 @@ def envoyer(fichier_source, fichier_dest, limiteur_debit=None, num_session=None,
                 # sous Windows on doit corriger les accents
                 nom_fichier_dest = str_lat1(fichier_dest)
             else:
-                # sinon ça a l'air de passer
+                # sinon ï¿½a a l'air de passer
                 nom_fichier_dest = str(fichier_dest)
             paquet = entete + nom_fichier_dest + donnees
             s.sendto(paquet, (HOST, PORT))
@@ -899,9 +899,9 @@ def envoyer(fichier_source, fichier_dest, limiteur_debit=None, num_session=None,
             #debug("debit moyen = %d" % limiteur_debit.debit_moyen())
             #time.sleep(0.3)
             pourcent = 100*(num_paquet+1)/nb_paquets
-            # affichage du pourcentage: la virgule évite un retour chariot
+            # affichage du pourcentage: la virgule ï¿½vite un retour chariot
             print "%d%%\r" % pourcent,
-            # pour forcer la mise à jour de l'affichage
+            # pour forcer la mise ï¿½ jour de l'affichage
             sys.stdout.flush()
         print "transfert en %.3f secondes - debit moyen %d Kbps" % (
         limiteur_debit.temps_total(), limiteur_debit.debit_moyen()*8/1000)
@@ -928,7 +928,7 @@ def sortDictBy(nslist, key):
 #-------------------
 
 def synchro_arbo(repertoire):
-    """pour synchroniser une arborescence en envoyant régulièrement tous les
+    """pour synchroniser une arborescence en envoyant rï¿½guliï¿½rement tous les
     fichiers."""
 
     logging.info('Synchronisation du repertoire "%s"' % str_lat1(repertoire))
@@ -939,11 +939,11 @@ def synchro_arbo(repertoire):
     # TODO : Distinguer le traitement d'une arborescence locale / distante
     if (0):
         print("arborescence locale")
-        # TODO : Traitement Local des donnnées :
-        #            - utiliser wath_directory pour détecter le besoin l'émission
+        # TODO : Traitement Local des donnnï¿½es :
+        #            - utiliser wath_directory pour dï¿½tecter le besoin l'ï¿½mission
     else:
         #print("arborescence distante")
-        # Traitement distant des donnnées :
+        # Traitement distant des donnnï¿½es :
         #     Boucle 1 : Analyse et priorisation des fichiers
         AllFileSendMax=False
         # test pour affichage d'un motif cyclique
@@ -968,12 +968,12 @@ def synchro_arbo(repertoire):
                 DeletionNeeded=False
                 parent, myfile=f.splitpath()
                 if(DRef.dict[f].tag == xfl.TAG_DIR):
-                    # Vérifier la présence de fils (dir / file)
+                    # Vï¿½rifier la prï¿½sence de fils (dir / file)
                     if not(bool(DRef.dict[f].getchildren())): DeletionNeeded=True
                 if(DRef.dict[f].tag == xfl.TAG_FILE):
                     LastView=float(DRef.dict[f].get(ATTR_LASTVIEW))
                     if (time.time() - (LastView + OffLineDelay)) > 0:
-                        # Disparu depuis X jours ; le fichier a été effacé
+                        # Disparu depuis X jours ; le fichier a ï¿½tï¿½ effacï¿½
                         # Supprimer l'enregistrement de Dref
                         DeletionNeeded=True
                 if DeletionNeeded:
@@ -1013,7 +1013,7 @@ def synchro_arbo(repertoire):
                         DRef.dict[parent][index].set(ATTR_LASTVIEW, (Dscrutation.et.get(xfl.ATTR_TIME)))
                     else:
                         DRef.dict[parent][index].set(xfl.ATTR_NAME, Dscrutation.dict[f].get(xfl.ATTR_NAME))
-                # Reconstruction du dictionnaire pour faciliter l'insertion des sous éléments
+                # Reconstruction du dictionnaire pour faciliter l'insertion des sous ï¿½lï¿½ments
                 if (Dscrutation.dict[f].tag == xfl.TAG_DIR):
                     DRef.pathdict()
                     RefreshDict=False
@@ -1025,7 +1025,7 @@ def synchro_arbo(repertoire):
                 monaff.AffCar()
                 debug("D  "+f)
                 if (Dscrutation.dict[f].tag == xfl.TAG_FILE):
-                    # Mise à jour des données
+                    # Mise ï¿½ jour des donnï¿½es
                     for attr in (xfl.ATTR_MTIME, xfl.ATTR_SIZE):
                         DRef.dict[f].set(attr, str(Dscrutation.dict[f].get(attr)))
                     for attr in (ATTR_LASTSEND, ATTR_CRC, ATTR_NBSEND):
@@ -1048,8 +1048,8 @@ def synchro_arbo(repertoire):
             for f in (only1 + different + same):
                 (shortname, extension) =  os.path.splitext(os.path.basename(f))
                 if not(extension in IgnoreExtensions) and (Dscrutation.dict[f].tag == xfl.TAG_FILE):
-                    # Ignorer les fichiers trop récents (risque de prendre une image iso en cours de téléchargement)
-                    # et les fichiers trop émis
+                    # Ignorer les fichiers trop rï¿½cents (risque de prendre une image iso en cours de tï¿½lï¿½chargement)
+                    # et les fichiers trop ï¿½mis
                     if abs(float(DRef.dict[f].get(xfl.ATTR_MTIME))-float(DRef.dict[f].get(ATTR_LASTVIEW)))>60 \
                     and int(DRef.dict[f].get(ATTR_NBSEND))<=MinFileRedundancy:
                         monfichier={'iteration':int(DRef.dict[f].get(ATTR_NBSEND)), 'file':f}
@@ -1065,7 +1065,7 @@ def synchro_arbo(repertoire):
             # Set TransmitDelay from min 300 to max time needed to identify data to send
             TransmitDelay=time.time()-float(Dscrutation.et.get(xfl.ATTR_TIME))
             if TransmitDelay < 300: TransmitDelay=300
-            # Boucle 2 d'émission temporelle
+            # Boucle 2 d'ï¿½mission temporelle
             FileLessRedundancy=0
             LastFileSendMax=False
             while (boucleemission.temps_total() < TransmitDelay) and (not(LastFileSendMax)):
@@ -1090,7 +1090,7 @@ def synchro_arbo(repertoire):
                             if (FileLessRedundancy == 0): AllFileSendMax=True
                         else:
                             FileLessRedundancy+=1
-                # Liste vide : rien à transmettre
+                # Liste vide : rien ï¿½ transmettre
                 else:
                     # permet de sortir de la boucle 2
                     LastFileSendMax=True
@@ -1110,8 +1110,8 @@ def synchro_arbo(repertoire):
 #---------------------
 
 def augmenter_priorite():
-    """pour augmenter la priorité du processus, afin de garantir une bonne
-    réception des paquets UDP."""
+    """pour augmenter la prioritï¿½ du processus, afin de garantir une bonne
+    rï¿½ception des paquets UDP."""
 
     if sys.platform == 'win32':
         # sous Windows:
@@ -1133,10 +1133,10 @@ def augmenter_priorite():
 
 def analyse_options():
     """pour analyser les options de ligne de commande.
-    (à l'aide du module optparse)"""
+    (ï¿½ l'aide du module optparse)"""
 
-    # on crée un objet optparse.OptionParser, en lui donnant comme chaîne
-    # "usage" la docstring en début de ce fichier:
+    # on crï¿½e un objet optparse.OptionParser, en lui donnant comme chaï¿½ne
+    # "usage" la docstring en dï¿½but de ce fichier:
     parseur = OptionParser_doc(usage="%prog [options] <fichier ou repertoire>")
     parseur.doc = __doc__
 
@@ -1160,12 +1160,12 @@ def analyse_options():
     parseur.add_option("-P", dest="pause",\
         help="Pause entre 2 boucles (en secondes)", type="int", default=300)
     parseur.add_option("-c", "--continue", action="store_true", dest="reprise",\
-        default=False, help="Fichier de reprise à chaud")
+        default=False, help="Fichier de reprise ï¿½ chaud")
 
 
     # on parse les options de ligne de commande:
     (options, args) = parseur.parse_args(sys.argv[1:])
-    # vérif qu'il y a 1 et 1 seule action:
+    # vï¿½rif qu'il y a 1 et 1 seule action:
     nb_actions = 0
     if options.envoi_fichier: nb_actions+=1
     if options.synchro_arbo: nb_actions+=1
@@ -1182,9 +1182,9 @@ def analyse_options():
 # PROGRAMME PRINCIPAL
 #=====================
 if __name__ == '__main__':
-    # pour que la date des fichiers soit gérée en nombre entier de secondes
-    # (cela dépend des OS: cf. aide Python)
-    # => utile uniquement pour générer un numéro de session
+    # pour que la date des fichiers soit gï¿½rï¿½e en nombre entier de secondes
+    # (cela dï¿½pend des OS: cf. aide Python)
+    # => utile uniquement pour gï¿½nï¿½rer un numï¿½ro de session
     os.stat_float_times(False)
 
     (options, args) = analyse_options()
@@ -1193,7 +1193,7 @@ if __name__ == '__main__':
     PORT = options.port_UDP
     MODE_DEBUG = options.debug
 
-    # Utilisation de Psyco pour améliorer les performances:
+    # Utilisation de Psyco pour amï¿½liorer les performances:
     # Perturbe l'affichage sous Windows: A CORRIGER.
     #try:
     #   import psyco
@@ -1211,16 +1211,16 @@ if __name__ == '__main__':
                 datefmt='%d/%m/%Y %H:%M:%S',
                 filename='bftp.log',
                 filemode='a')
-    logging.info("Démarrage de BlindFTP")
+    logging.info("Dï¿½marrage de BlindFTP")
 
     if options.envoi_fichier:
         envoyer(cible, cible.name)
     elif options.synchro_arbo:
-        # Délais pour considérer un fichier "hors ligne" comme définitivement effacé
+        # Dï¿½lais pour considï¿½rer un fichier "hors ligne" comme dï¿½finitivement effacï¿½
         OffLineDelay=86400*7  # 86400 vaut 1 jour
 
-        # Fichier référence de l'arborescence synchronisée
-        # TODO : Nom du fichier transmis en paramètre
+        # Fichier rï¿½fï¿½rence de l'arborescence synchronisï¿½e
+        # TODO : Nom du fichier transmis en paramï¿½tre
         print "Lecture/contruction du fichier de reprise"
         XFLFile_id=False
         working=TraitEncours.TraitEnCours()
@@ -1256,9 +1256,9 @@ if __name__ == '__main__':
             os.remove(XFLFile)
     elif options.recevoir:
         CHEMIN_DEST = path(args[0])
-        # on commence par augmenter la priorité du processus de réception:
+        # on commence par augmenter la prioritï¿½ du processus de rï¿½ception:
         augmenter_priorite()
-        # puis on se met en réception:
+        # puis on se met en rï¿½ception:
         recevoir(CHEMIN_DEST)
     logging.info("Arret de BlindFTP")
 

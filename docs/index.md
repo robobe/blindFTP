@@ -1,17 +1,9 @@
-# Welcome to MkDocs
+# BlindFTP
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+BlindFTP is a software that allows files to be transferred by IP network between 2 machines.
+through a unidirectional link, without the need for acknowledgments. The lack of acknowledgment is compensated by data redundancy of the data transmitted by UDP.
+The project support by hardware to build "network diode" for example network optical converter
 
-## Commands
+![](images/network_diode.drawio.png)
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+The project base on old source code from [Original project](https://www.decalage.info/python/blindftp)

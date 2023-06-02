@@ -50,15 +50,15 @@ RunningFile = 'bftp_run.ini'
 # Network Packet Max size
 if sys.platform == 'darwin':
     # With MacOSX exception 'Message too long' if size is too long
-    TAILLE_PAQUET = 1500
+    PACKAGE_SIZE = 1500
 else:
-    TAILLE_PAQUET = 65500
+    PACKAGE_SIZE = 65500
 
 MODE_DEBUG = True   # check if debug() messages are displayed
 
 RACINE_TEMP = "temp"    # Tempfile root
 
-MAX_NOM_FICHIER = 1024  # Max length for the filename field
+MAX_FILE_NAME = 1024  # Max length for the filename field
 
 HB_DELAY = 10 # Default time between two Heartbeat
 
@@ -87,14 +87,14 @@ IgnoreExtensions = ('.part', '.tmp', '.ut', '.dlm') #  Extensions of temp files 
 # (suivi du nom du fichier, puis des donn�es)
 FORMAT_ENTETE = "BBHQIIIIQIi"
 # Correction bug 557 : taille du format diff�re selon les OS
-TAILLE_ENTETE = struct.calcsize(FORMAT_ENTETE)
+SIZE_ENTETE = struct.calcsize(FORMAT_ENTETE)
 # size : Win32 (48) ; Linux (44) ; MacOSX PPC (44)
 
-# Types de paquets:
-PAQUET_FICHIER      = 0  # File
-PAQUET_REPERTOIRE   = 1  # Directory (not yet use)
-PAQUET_HEARTBEAT    = 10 # HeartBeat
-PAQUET_DELETEFile   = 16 # File Delete
+# Types of packages:
+PACKAGE_FILE      = 0  # File
+PACKAGE_DIRECTORY   = 1  # Directory (not yet use)
+PACKAGE_HEARTBEAT    = 10 # HeartBeat
+PACKAGE_DELETEFile   = 16 # File Delete
 
 # Complement d'attributs � XFL
 ATTR_CRC = "crc" 			            # File CRC
@@ -114,8 +114,8 @@ options = None
 
 # dictionnaire des fichiers en cours de r�ception
 # receiving files dictionnary
-global fichiers
-fichiers = {}
+global files
+files = {}
 
 # pour mesurer les stats de reception:
 
@@ -124,14 +124,14 @@ stats = None
 #------------------------------------------------------------------------------
 # str_ajuste : Adjust string to a dedicated length adding space or cutting string
 #-------------------
-def str_ajuste (chaine, longueur=79):
+def str_ajuste (chain, longueur=79):
     """ajuste la chaine pour qu'elle fasse exactement la longueur indiqu�e,
     en coupant ou en remplissant avec des espaces."""
-    l = len(chaine)
+    l = len(chain)
     if l>longueur:
-        return chaine[0:longueur]
+        return chain[0:longueur]
     else:
-        return chaine + " "*(longueur-l)
+        return chain + " "*(longueur-l)
 
 #------------------------------------------------------------------------------
 # DEBUG : Display debug messages if MODE_DEBUG is True
@@ -323,7 +323,7 @@ class Sender:
         logging.info('Fichier "%s" recu en entier, recopie a destination.'% self.nom_fichier)
         # dans ce cas on retire le fichier du dictionnaire
         self.est_termine = True
-        del fichiers[self.nom_fichier]
+        del files[self.nom_fichier]
 
     def traiter_paquet(self, paquet):
         "pour traiter un paquet contenant un morceau du fichier."
@@ -366,7 +366,7 @@ class Paquet:
     def __init__(self):
         "Constructeur d'objet Paquet BFTP."
         # on initialise les infos contenues dans l'ent�te du paquet
-        self.type_paquet = PAQUET_FICHIER
+        self.type_paquet = PACKAGE_FILE
         self.longueur_nom = 0
         self.taille_donnees = 0
         self.offset = 0
@@ -383,7 +383,7 @@ class Paquet:
     def decoder(self, paquet):
         "Pour d�coder un paquet BFTP."
         # on d�code d'abord l'ent�te (cf. d�but de ce fichier):
-        entete = paquet[0:TAILLE_ENTETE]
+        entete = paquet[0:SIZE_ENTETE]
         (
             self.type_paquet,
             self.longueur_nom,
@@ -408,14 +408,14 @@ class Paquet:
         debug("taille_fichier     = %d" % self.taille_fichier)
         debug("date_fichier       = %s" % mtime2str(self.date_fichier))
         debug("CRC32              = %08X" % self.crc32)
-        if self.type_paquet not in [PAQUET_FICHIER, PAQUET_HEARTBEAT, PAQUET_DELETEFile]:
+        if self.type_paquet not in [PACKAGE_FILE, PACKAGE_HEARTBEAT, PACKAGE_DELETEFile]:
             raise ValueError(msg='type de paquet incorrect')
-        if self.type_paquet == PAQUET_FICHIER:
-            if self.longueur_nom > MAX_NOM_FICHIER:
+        if self.type_paquet == PACKAGE_FILE:
+            if self.longueur_nom > MAX_FILE_NAME:
                 raise ValueError(msg='nom de fichier trop long')
             if self.offset + self.taille_donnees > self.taille_fichier:
                 raise ValueError(msg='offset ou taille des donnees incorrects')
-            self.nom_fichier = paquet[TAILLE_ENTETE : TAILLE_ENTETE + self.longueur_nom]
+            self.nom_fichier = paquet[SIZE_ENTETE : SIZE_ENTETE + self.longueur_nom]
             # conversion en utf-8 pour �viter probl�mes d�s aux accents
             # A VOIR: seulement sous Windows ?? (sous Mac �a pose probl�me...)
             if sys.platform == 'win32':
@@ -424,7 +424,7 @@ class Paquet:
             if chemin_interdit(self.nom_fichier):
                 logging.error('nom de fichier ou de chemin incorrect: %s' % self.nom_fichier)
                 raise ValueError(msg='nom de fichier ou de chemin incorrect')
-            taille_entete_complete = TAILLE_ENTETE + self.longueur_nom
+            taille_entete_complete = SIZE_ENTETE + self.longueur_nom
             if self.taille_donnees != len(paquet) - taille_entete_complete:
                 debug("taille_paquet = %d" % len(paquet))
                 debug("taille_entete_complete = %d" % taille_entete_complete)
@@ -435,16 +435,16 @@ class Paquet:
             #if self.num_paquet_session % 100 == 0:
                 #stats.print_stats()
             # est-ce que le fichier est en cours de r�ception ?
-            if self.nom_fichier in fichiers:
+            if self.nom_fichier in files:
                 debug("Fichier en cours de reception")
-                f = fichiers[self.nom_fichier]
+                f = files[self.nom_fichier]
                 # on v�rifie si le fichier n'a pas chang�:
                 if f.date_fichier != self.date_fichier \
                 or f.taille_fichier != self.taille_fichier \
                 or f.crc32 != self.crc32:
                     # on commence par annuler la r�ception en cours:
                     f.annuler_reception()
-                    del fichiers[self.nom_fichier]
+                    del files[self.nom_fichier]
                     # puis on recr�e un nouvel objet fichier d'apr�s les infos du paquet:
                     self.nouveau_fichier()
                 else:
@@ -475,12 +475,12 @@ class Paquet:
                 else:
                     # sinon on cr�e un nouvel objet fichier d'apr�s les infos du paquet:
                     self.nouveau_fichier()
-        if self.type_paquet == PAQUET_HEARTBEAT:
+        if self.type_paquet == PACKAGE_HEARTBEAT:
             debug("Reception HEARTBEAT")
             HeartBeat.check_heartbeat(hb_reciver, self.num_session, self.num_paquet_session, self.num_paquet)
-        if self.type_paquet == PAQUET_DELETEFile:
+        if self.type_paquet == PACKAGE_DELETEFile:
             debug("Reception DeleteFile notification")
-            self.nom_fichier = paquet[TAILLE_ENTETE : TAILLE_ENTETE + self.longueur_nom]
+            self.nom_fichier = paquet[SIZE_ENTETE : SIZE_ENTETE + self.longueur_nom]
             if sys.platform == 'win32':
                 self.nom_fichier = self.nom_fichier.decode('utf_8', 'strict')
             fichier_dest = CHEMIN_DEST / self.nom_fichier
@@ -522,7 +522,7 @@ class Paquet:
         debug("Nouveau fichier ou fichier mis a jour")
         # on cr�e un nouvel objet fichier d'apr�s les infos du paquet:
         nouveau_fichier = Sender(self)
-        fichiers[self.nom_fichier] = nouveau_fichier
+        files[self.nom_fichier] = nouveau_fichier
         nouveau_fichier.traiter_paquet(self)
 
     def construire(self):
@@ -658,7 +658,7 @@ class HeartBeat:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         # on commence par packer l'entete:
         entete = struct.pack(FORMAT_ENTETE,
-            PAQUET_HEARTBEAT,
+            PACKAGE_HEARTBEAT,
             0,
             taille_donnees,
             0,
@@ -762,7 +762,7 @@ def receive(repertoire):
     s.bind((HOST, PORT))
     while 1:
         debug("")
-        paquet, emetteur = s.recvfrom(TAILLE_PAQUET)
+        paquet, emetteur = s.recvfrom(PACKAGE_SIZE)
         debug ('emetteur: '+str(emetteur))
         if not paquet: break
         #print 'donnees recues:'
@@ -786,7 +786,7 @@ def CalcCRC(fichier):
     MonAff=TraitEncours.TraitEnCours()
     MonAff.StartIte()
     chaine=" Calcul CRC32 " + fichier
-    MonAff.NewChaine(chaine, truncate=True)
+    MonAff.new_channel(chaine, truncate=True)
     try:
         f = open(fichier, 'rb')
         buffer = f.read(16384)
@@ -823,7 +823,7 @@ def SendDeleteFileMessage(fichier):
     # on commence par packer l'entete:
     entete = struct.pack(
         FORMAT_ENTETE,
-        PAQUET_DELETEFile,
+        PACKAGE_DELETEFile,
         taille,
         taille,
         0,
@@ -843,18 +843,18 @@ def SendDeleteFileMessage(fichier):
 # ENVOYER
 #-------------------
 
-def send(fichier_source, fichier_dest, limiteur_debit=None, num_session=None,
+def send(source_file, dest_file, rate_limiter=None, num_session=None,
     num_paquet_session=None, crc=None):
     """Pour �mettre un fichier en paquets UDP BFTP.
 
-    fichier_source : chemin du fichier source sur le disque local
-    fichier_dest   : chemin relatif du fichier dans le r�pertoire destination
-    limiteur_debit : pour limiter le d�bit d'envoi
-    num_session    : num�ro de session
-    num_paquet_session : compteur de paquets
+    source_file: source file path on the local disk
+    file_dest: relative path of the file in the destination directory
+    rate_limiter: to limit the sending rate
+    num_session: session number
+    num_paquet_session: packet counter
     """
 
-    msg = "Envoi du fichier %s..." % fichier_source
+    msg = "Envoi du fichier %s..." % source_file
     Console.Print_temp(msg,NL=True)
     logging.info(msg)
     if num_session == None:
@@ -862,72 +862,72 @@ def send(fichier_source, fichier_dest, limiteur_debit=None, num_session=None,
         num_paquet_session = 0
     debug("num_session         = %d" % num_session)
     debug("num_paquet_session  = %d" % num_paquet_session)
-    debug("fichier destination = %s" % fichier_dest)
+    debug("fichier destination = %s" % dest_file)
     if sys.platform == 'win32':
         # sous Windows on doit corriger les accents
-        nom_fichier_dest = fichier_dest.encode('utf_8','strict')
+        nom_fichier_dest = dest_file.encode('utf_8','strict')
     else:
         # sinon �a a l'air de passer
-        nom_fichier_dest = str(fichier_dest)
+        nom_fichier_dest = str(dest_file)
     longueur_nom = len(nom_fichier_dest)
     debug("longueur_nom = %d" % longueur_nom)
-    if longueur_nom > MAX_NOM_FICHIER:
+    if longueur_nom > MAX_FILE_NAME:
         raise ValueError
-    if fichier_source.isfile():
-        taille_fichier = fichier_source.getsize()
-        date_fichier = fichier_source.getmtime()
-        debug("taille_fichier = %d" % taille_fichier)
-        debug("date_fichier = %s" % mtime2str(date_fichier))
+    if source_file.isfile():
+        file_size = source_file.getsize()
+        file_date = source_file.getmtime()
+        debug("file size = %d" % file_size)
+        debug("date_fichier = %s" % mtime2str(file_date))
         # calcul de CRC32
         if crc==None:
-            crc32=CalcCRC(fichier_source)
+            crc32=CalcCRC(source_file)
         else:
             crc32=crc
     # taille restant pour les donn�es dans un paquet normal
-    taille_donnees_max = TAILLE_PAQUET - TAILLE_ENTETE - longueur_nom
+    taille_donnees_max = PACKAGE_SIZE - SIZE_ENTETE - longueur_nom
     debug("taille_donnees_max = %d" % taille_donnees_max)
-    nb_paquets = (taille_fichier + taille_donnees_max-1) / taille_donnees_max
+    nb_paquets = (file_size + taille_donnees_max-1) / taille_donnees_max
     if nb_paquets == 0:
         # si le fichier est vide, il faut quand m�me envoyer un paquet
         nb_paquets = 1
     debug("nb_paquets = %d" % nb_paquets)
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    reste_a_envoyer = taille_fichier
+    reste_a_envoyer = file_size
     try:
-        f = open(fichier_source, 'rb')
-        if limiteur_debit == None:
+        f = open(source_file, 'rb')
+        if rate_limiter == None:
             # si aucun limiteur fourni, on en initialise un:
-            limiteur_debit = LimiteurDebit(options.debit)
-        limiteur_debit.depart_chrono()
+            rate_limiter = LimiteurDebit(options.debit)
+        rate_limiter.depart_chrono()
         for num_paquet in range(0, nb_paquets):
             # on fait une pause si besoin pour limiter le d�bit
-            limiteur_debit.limiter_debit()
+            rate_limiter.limiter_debit()
             if reste_a_envoyer > taille_donnees_max:
-                taille_donnees = taille_donnees_max
+                data_size = taille_donnees_max
             else:
-                taille_donnees = reste_a_envoyer
-            reste_a_envoyer -= taille_donnees
+                data_size = reste_a_envoyer
+            reste_a_envoyer -= data_size
             offset = f.tell()
-            donnees = f.read(taille_donnees)
+            donnees = f.read(data_size)
             # on commence par packer l'entete:
             entete = struct.pack(
                 FORMAT_ENTETE,
-                PAQUET_FICHIER,
+                PACKAGE_FILE,
                 longueur_nom,
-                taille_donnees,
+                data_size,
                 offset,
                 num_session,
                 num_paquet_session,
                 num_paquet,
                 nb_paquets,
-                taille_fichier,
-                date_fichier,
+                file_size,
+                file_date,
                 crc32
                 )
             paquet = entete + nom_fichier_dest + donnees
             s.sendto(paquet, (HOST, PORT))
             num_paquet_session += 1
-            limiteur_debit.ajouter_donnees(len(paquet))
+            rate_limiter.ajouter_donnees(len(paquet))
             #debug("debit moyen = %d" % limiteur_debit.debit_moyen())
             #time.sleep(0.3)
             pourcent = 100*(num_paquet+1)/nb_paquets
@@ -936,9 +936,9 @@ def send(fichier_source, fichier_dest, limiteur_debit=None, num_session=None,
             # pour forcer la mise � jour de l'affichage
             sys.stdout.flush()
         print("transfert en %.3f secondes - debit moyen %d Kbps" % (
-        limiteur_debit.temps_total(), limiteur_debit.debit_moyen()*8/1000))
+        rate_limiter.temps_total(), rate_limiter.debit_moyen()*8/1000))
     except IOError:
-        msg = "Ouverture du fichier %s..." % fichier_source
+        msg = "Ouverture du fichier %s..." % source_file
         print("Erreur : " + msg)
         logging.error(msg)
         num_paquet_session=-1
@@ -1253,7 +1253,7 @@ def analyse_options():
     parseur.doc = __doc__
 
     # on ajoute les options possibles:
-    parseur.add_option("-e", "--envoi", action="store_true", dest="envoi_fichier",\
+    parseur.add_option("-e", "--pitcher", action="store_true", dest="pitcher",\
         default=False, help="Envoyer le fichier")
     parseur.add_option("-s", "--synchro", action="store_true", dest="synchro_arbo",\
         default=False, help="Synchroniser l'arborescence")
@@ -1281,7 +1281,7 @@ def analyse_options():
     (options, args) = parseur.parse_args(sys.argv[1:])
     # v�rif qu'il y a 1 et 1 seule action:
     nb_actions = 0
-    if options.envoi_fichier: nb_actions+=1
+    if options.pitcher: nb_actions+=1
     if options.synchro_arbo: nb_actions+=1
     if options.synchro_arbo_stricte: nb_actions+=1
     if options.recevoir: nb_actions+=1
@@ -1323,7 +1323,7 @@ if __name__ == '__main__':
     if not(options.recevoir):
         hb_sender.start_hb_sender()
 
-    if options.envoi_fichier:
+    if options.pitcher:
         send(target, target.name)
     elif (options.synchro_arbo or options.synchro_arbo_stricte):
         # D�lais pour consid�rer un fichier "hors ligne" comme d�finitivement effac�
