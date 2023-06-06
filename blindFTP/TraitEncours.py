@@ -91,7 +91,7 @@ class TraitEnCours:
 
     def AffCar(self, *args):
         """
-        Affichage caractere par caract�re
+        Display character by character
         """
         CurrentTime = time.time()
         if CurrentTime - self.__temps > 0.2:

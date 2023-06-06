@@ -1,0 +1,39 @@
+{
+    "todo-tree.general.tags": [
+        "BUG",
+        "HACK",
+        "FIXME",
+        "TODO",
+        "XXX",
+        "[ ]",
+        "[x]",
+        "BOOKMARK"
+    ],
+    "todo-tree.highlights.customHighlight": {
+        "BOOKMARK": {
+            "icon": "bookmark",
+            "iconColour": "#00ff00",
+            "type": "line",
+            "foreground": "#00ff00",
+            "gutterIcon": true
+        },
+        "BUG": {
+            "icon": "bug"
+        },
+        "HACK": {
+            "icon": "tools"
+        },
+        "FIXME": {
+            "icon": "flame"
+        },
+        "XXX": {
+            "icon": "x"
+        },
+        "[ ]": {
+            "icon": "issue-draft"
+        },
+        "[x]": {
+            "icon": "issue-closed"
+        }
+    }
+}
